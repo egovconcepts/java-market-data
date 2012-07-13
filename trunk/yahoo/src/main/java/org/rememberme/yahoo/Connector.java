@@ -7,27 +7,43 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Time;
 
+import org.apache.log4j.Logger;
+
 public class Connector {
 
 	Connection conn = null;
-	String url = "jdbc:mysql://peipito.no-ip.org:3306/";
-	String dbName = "YAHOO_MARKET_DATA";
+	String url;
+	String dbName;
 	String driver = "com.mysql.jdbc.Driver";
-	String userName = "yahoo";
-	String password = "yahoo";
+	String userName;
+	String password;
 	
 	PreparedStatement insertStock;
+	
+	private static Logger log = Logger.getLogger(Connector.class);
 	
 	public Connector() {
 	}
 
+	public Connector(String dbServer, 
+			String dbPort,
+			String dbName, 
+			String userName, 
+			String password) {
+		super();
+		this.url = "jdbc:mysql://" + dbServer + ":" +dbPort + "/";
+		this.dbName = dbName;
+		this.userName = userName;
+		this.password = password;
+	}
+
 	public void init() throws SQLException{
-		System.out.println("MySQL Connect Example.");
+		log.info("Connect to " + url);
 		try {
 			Class.forName(driver).newInstance();
 			conn = DriverManager
 					.getConnection(url + dbName, userName, password);
-			System.out.println("Connected to the database");
+			log.info("Connected to the database");
 //			conn.close();
 //			System.out.println("Disconnected from database");
 		} catch (Exception e) {

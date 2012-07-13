@@ -30,10 +30,26 @@ public class Stock {
 		String [] splitted = str.split(",");
 		name = splitted[0];
 		description = splitted[1];
-		bbid = Double.parseDouble(splitted[2]);
-		qbid = Integer.parseInt(splitted[3]);
-		qask = Integer.parseInt(splitted[4]);
-		bask = Double.parseDouble(splitted[5]);
+		
+		if("N/A".equalsIgnoreCase(splitted[2]))
+			bbid = 0;
+		else 
+			bbid = Double.parseDouble(splitted[2]);
+		
+		if("N/A".equalsIgnoreCase(splitted[3]))
+			qbid = 0;
+		else 
+			qbid = Integer.parseInt(splitted[3]);
+		
+		if("N/A".equalsIgnoreCase(splitted[4]))
+			qask = 0;
+		else
+			qask = Integer.parseInt(splitted[4]);
+		
+		if("N/A".equalsIgnoreCase(splitted[5]))
+			bask = 0;
+		else
+			bask = Double.parseDouble(splitted[5]);
 	}
 
 	@Override
