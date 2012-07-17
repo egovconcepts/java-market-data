@@ -55,6 +55,9 @@ public class DataRetreiver {
 			InterruptedException, SQLException {
 		DataRetreiver dr = new DataRetreiver();
 		
+		if(args.length < 5)
+			log.info("usage : server port dbname dblogin dbpwd");
+		
 		String server = args[0];
 		String port = args[1];
 		String dbName = args[2];
