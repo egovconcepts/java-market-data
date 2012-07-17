@@ -21,22 +21,24 @@ public class DataRetreiver {
 	}
 
 	public void init() throws SQLException, IOException, InterruptedException{
-//		Connector connector = new Connector();
 		connector.init();
 		
 		while (true) {
-			Thread.sleep(2000);
+			Thread.sleep(1000);
 			
 			url = new URL(
-					"http://finance.yahoo.com/d/quotes.csv?s=GOOG&f=snb2a5b6b3");
+//					"http://finance.yahoo.com/d/quotes.csv?s=GOOG&f=snb2a5b6b3");
+//					"http://finance.yahoo.com/d/quotes.csv?s=419919.PA+AC.PA+ALU.PA&f=snb3b6a5b2");
+		"http://finance.yahoo.com/d/quotes.csv?s="+cac40()+"&f=snb3b6a5b2");
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					url.openStream()));
 			
 			String inputLine;
 			while ((inputLine = in.readLine()) != null){
+				log.info(inputLine);
 				Stock stock = new Stock();
 				stock.parse(inputLine);
-				log.info(stock);
+//				log.info(stock);
 				connector.insert_market_data(stock);
 			}
 			
@@ -66,5 +68,55 @@ public class DataRetreiver {
 		log.info(server + " " + port + " " + dbName + " " + dblogin + " " + dbPwd);
 		
 		dr.init();
+	}
+	
+	private String cac40(){
+//		http://en.wikipedia.org/wiki/CAC_40
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("AC.PA").append("+") 				// Accor Paris
+			.append("419919.PA").append("+")		// Air Liquide Paris
+			.append("ALU.PA").append("+")			// Alcatel Lucent
+			.append("ALO.PA").append("+")			// Alstom SA
+			.append("MT.PA").append("+")			// Arcelor Mittal
+			.append("CS.PA").append("+")			// Axa
+			.append("BNP.PA").append("+")			// BNP
+			.append("EN.PA").append("+")			// Bouygue
+			.append("CAP.PA").append("+")			// Cap Gemini
+			.append("CA.PA").append("+")			// Carrefour
+			.append("ACA.PA").append("+")			
+			.append("EAD.PA").append("+")			
+			.append("EDF.PA").append("+")			
+			.append("EI.PA").append("+")			
+			.append("FTE.PA").append("+")			
+			.append("GSZ.PA").append("+")			
+			.append("BN.PA").append("+")			
+			.append("OR.PA").append("+")			
+			.append("LG.PA").append("+")			
+			.append("LR.PA").append("+")			
+			.append("MC.PA").append("+")			
+			.append("ML.PA").append("+")			
+			.append("ML.PA").append("+")			
+			.append("RI.PA").append("+")			
+			.append("UG.PA").append("+")			
+			.append("PP.PA").append("+")			
+			.append("PUB.PA").append("+")			
+			.append("RNO.PA").append("+")			
+			.append("SAF.PA").append("+")			
+			.append("SGO.PA").append("+")			
+			.append("SAN.PA").append("+")			
+			.append("SU.PA").append("+")			
+			.append("GLE.PA").append("+")			
+			.append("STM.PA").append("+")			
+			.append("TEC.PA").append("+")			
+			.append("FP.PA").append("+")			
+			.append("UL.PA").append("+")			
+			.append("VK.PA").append("+")			
+			.append("VIE.PA").append("+")			
+			.append("DG.PA").append("+")			
+			.append("VIV.PA").append("+");			
+			
+			
+		return sb.toString();
 	}
 }

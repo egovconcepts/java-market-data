@@ -44,13 +44,11 @@ public class Connector {
 			conn = DriverManager
 					.getConnection(url + dbName, userName, password);
 			log.info("Connected to the database");
-//			conn.close();
-//			System.out.println("Disconnected from database");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		String request = "insert into YAHOO_MARKET_DATA (DATE,TIME,BBID,BQTY,AQTY,BAK) values (?,?,?,?,?,?)";
+		String request = "insert into YAHOO_MARKET_DATA (DATE,TIME,STOCK_NAME,STOCK_DES,BBID,BQTY,AQTY,BAK) values (?,?,?,?,?,?,?,?)";
 		insertStock = conn.prepareStatement(request);
 	}
 	
@@ -59,14 +57,15 @@ public class Connector {
 		try {
 			insertStock.setDate(1, new Date(d.getTime()));
 			insertStock.setTime(2, new Time(d.getTime()));
-			insertStock.setDouble(3, stock.getBbid());
-			insertStock.setLong(4, stock.getQbid());
-			insertStock.setLong(5,stock.getQask());
-			insertStock.setDouble(6, stock.getBask());
+			insertStock.setString(3, stock.getName());
+			insertStock.setString(4, stock.getDescription());
+			insertStock.setDouble(5, stock.getBbid());
+			insertStock.setLong(6, stock.getQbid());
+			insertStock.setLong(7,stock.getQask());
+			insertStock.setDouble(8, stock.getBask());
 			insertStock.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 	}
 }
