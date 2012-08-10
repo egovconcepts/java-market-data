@@ -120,7 +120,6 @@ public class DataRetreiver {
 			.append("VIV.PA").append("+");
 //			.append("^FCHI");			
 			
-			
 		return sb.toString();
 	}
 }
