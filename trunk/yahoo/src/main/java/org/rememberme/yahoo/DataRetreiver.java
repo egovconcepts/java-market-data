@@ -27,9 +27,8 @@ public class DataRetreiver {
 			Thread.sleep(1000);
 			
 			url = new URL(
-//					"http://finance.yahoo.com/d/quotes.csv?s=GOOG&f=snb2a5b6b3");
-//					"http://finance.yahoo.com/d/quotes.csv?s=419919.PA+AC.PA+ALU.PA&f=snb3b6a5b2");
 		"http://finance.yahoo.com/d/quotes.csv?s="+cac40()+"&f=snb3b6a5b2");
+//			"http://download.finance.yahoo.com/d/quotes.csv?s="+cac40()+"&f=snohgv");
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					url.openStream()));
 			
@@ -38,7 +37,6 @@ public class DataRetreiver {
 				log.info(inputLine);
 				Stock stock = new Stock();
 				stock.parse(inputLine);
-//				log.info(stock);
 				connector.insert_market_data(stock);
 			}
 			
@@ -78,7 +76,7 @@ public class DataRetreiver {
 	private String cac40(){
 //		http://en.wikipedia.org/wiki/CAC_40
 		StringBuilder sb = new StringBuilder();
-		
+//		sb
 		sb.append("AC.PA").append("+") 				// Accor Paris
 			.append("419919.PA").append("+")		// Air Liquide Paris
 			.append("ALU.PA").append("+")			// Alcatel Lucent
@@ -119,7 +117,8 @@ public class DataRetreiver {
 			.append("VK.PA").append("+")			
 			.append("VIE.PA").append("+")			
 			.append("DG.PA").append("+")			
-			.append("VIV.PA").append("+");			
+			.append("VIV.PA").append("+");
+//			.append("^FCHI");			
 			
 			
 		return sb.toString();
