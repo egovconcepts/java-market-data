@@ -6,8 +6,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.rememberme.yahoo.client.StockClient;
-import org.rememberme.yahoo.client.Client;
 
 public class Server implements Runnable {
 
