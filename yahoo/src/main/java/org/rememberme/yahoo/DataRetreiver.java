@@ -76,7 +76,6 @@ public class DataRetreiver {
 	private String cac40(){
 //		http://en.wikipedia.org/wiki/CAC_40
 		StringBuilder sb = new StringBuilder();
-//		sb
 		sb.append("AC.PA").append("+") 				// Accor Paris
 			.append("419919.PA").append("+")		// Air Liquide Paris
 			.append("ALU.PA").append("+")			// Alcatel Lucent

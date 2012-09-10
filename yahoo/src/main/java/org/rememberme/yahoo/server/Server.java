@@ -3,18 +3,16 @@ package org.rememberme.yahoo.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
+import org.rememberme.yahoo.Stock;
 
 public class Server implements Runnable {
 
-	List<Client> clients;
+	ClientManager<StockClient, Stock> clientManager = null; 
 	private ServerSocket serverSocket = null;
 
 	public Server() {
-		clients = new ArrayList<Client>(100);
-
+		clientManager = new ClientManager<StockClient, Stock>();
 		try {
 			serverSocket = new ServerSocket(4444);
 		} catch (IOException e) {
@@ -24,22 +22,17 @@ public class Server implements Runnable {
 	}
 
 	public void run() {
-
 		while (true) {
-
 			Socket clientSocket = null;
 			try {
 				clientSocket = serverSocket.accept();
 				StockClient client = new StockClient();
 				client.setSocket(clientSocket);
-				
+				clientManager.addClient(client);
 			} catch (IOException e) {
 				System.err.println("Accept failed.");
 				System.exit(1);
 			}
-
 		}
-
 	}
-
 }
