@@ -48,7 +48,7 @@ public class Connector {
 			e.printStackTrace();
 		}
 		
-		String request = "insert into YAHOO_MARKET_DATA (DATE,TIME,STOCK_NAME,STOCK_DES,BBID,BQTY,AQTY,BAK) values (?,?,?,?,?,?,?,?)";
+		String request = "insert into YAHOO_MARKET_DATA (DATE,TIME,STOCK_NAME,STOCK_DES,BBID,BQTY,AQTY,BASK) values (?,?,?,?,?,?,?,?)";
 		insertStock = conn.prepareStatement(request);
 	}
 	
