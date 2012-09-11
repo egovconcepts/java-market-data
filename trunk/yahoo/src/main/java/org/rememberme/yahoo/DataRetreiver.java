@@ -61,10 +61,11 @@ public class DataRetreiver {
 		String server = args[0];
 		String port = args[1];
 		String dbName = args[2];
-		String dblogin = args[3];
-		String dbPwd = args[4];
+		String tableName = args[3];
+		String dblogin = args[4];
+		String dbPwd = args[5];
 		
-		Connector connector = new Connector(server,port,dbName,dblogin,dbPwd);
+		Connector connector = new Connector(server,port,dbName,tableName,dblogin,dbPwd);
 		dr.setConnector(connector);
 		
 		

@@ -14,6 +14,7 @@ public class Connector {
 	Connection conn = null;
 	String url;
 	String dbName;
+	String tableName;
 	String driver = "com.mysql.jdbc.Driver";
 	String userName;
 	String password;
@@ -28,6 +29,7 @@ public class Connector {
 	public Connector(String dbServer, 
 			String dbPort,
 			String dbName, 
+			String tableName,
 			String userName, 
 			String password) {
 		super();
@@ -35,6 +37,7 @@ public class Connector {
 		this.dbName = dbName;
 		this.userName = userName;
 		this.password = password;
+		this.tableName = tableName;
 	}
 
 	public void init() throws SQLException{
@@ -48,7 +51,7 @@ public class Connector {
 			e.printStackTrace();
 		}
 		
-		String request = "insert into YAHOO_MARKET_DATA (DATE,TIME,STOCK_NAME,STOCK_DES,BBID,BQTY,AQTY,BASK) values (?,?,?,?,?,?,?,?)";
+		String request = "insert into "+ tableName +" (DATE,TIME,STOCK_NAME,STOCK_DES,BBID,BQTY,AQTY,BASK) values (?,?,?,?,?,?,?,?)";
 		insertStock = conn.prepareStatement(request);
 	}
 	
