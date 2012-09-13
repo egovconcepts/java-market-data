@@ -55,6 +55,7 @@ public class Connector {
 		insertStock = conn.prepareStatement(request);
 	}
 	
+	
 	public void insert_market_data(Stock stock){
 		java.util.Date d = new java.util.Date();
 		try {
