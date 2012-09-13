@@ -15,9 +15,11 @@ public class DataRetreiver {
 
 	private URL url;
 	private Connector connector;
+	private StockManager stockManager;
 	
 	public DataRetreiver() {
 		BasicConfigurator.configure();
+		stockManager = new StockManager();
 	}
 
 	public void init() throws SQLException, IOException, InterruptedException{
@@ -35,8 +37,13 @@ public class DataRetreiver {
 			while ((inputLine = in.readLine()) != null){
 				Stock stock = new Stock();
 				stock.parse(inputLine);
-				connector.insert_market_data(stock);
-				log.info(stock);
+				boolean isNewStock = stockManager.addStock(stock);
+				if(isNewStock) {
+					connector.insert_market_data(stock);
+					log.info("NEW " + stock);
+				}else{
+					log.info("OLD " + stock);
+				}
 			}
 			
 			in.close();

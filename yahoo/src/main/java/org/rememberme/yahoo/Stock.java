@@ -2,7 +2,7 @@ package org.rememberme.yahoo;
 
 import java.util.Date;
 
-public class Stock {
+public class Stock implements Comparable<Stock>{
 
 	private String name;
 	private String description;
@@ -88,5 +88,38 @@ public class Stock {
 	
 	public Date getD() {
 		return d;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		Stock stock = (Stock) o;
+		
+		if(!name.equalsIgnoreCase(stock.name)) return false;
+		if(bbid != stock.bbid) return false;
+		if(qbid != stock.qbid) return false;
+		if(qask != stock.qask) return false;
+		if(bask != stock.bask) return false;
+		
+		return true;
+	}
+	
+	public int compareTo(Stock o) {
+		
+		if(!name.equalsIgnoreCase(o.name))
+			return name.compareTo(o.name);
+		
+		if(bbid < o.bbid) 		return -1;
+		else if(bbid > o.bbid) 	return 1;
+
+		if(qbid < o.qbid)		return -1;
+		else if (qbid > o.qbid) return 1;
+		
+		if(qask < o.qask)		return -1;
+		else if (qask > o.qask) return 1;
+		
+		if(bask < o.bask) 		return -1;
+		else if(bask > o.bask)	return 1;
+		
+		return 0;
 	}
 }
