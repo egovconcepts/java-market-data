@@ -31,6 +31,11 @@ public class Stock {
 		name = splitted[0];
 		description = splitted[1];
 		
+//		remove the " at the beginning and at the end of the name and the description fields.
+		
+		name = name.replaceAll("\"", "");
+		description = description.replaceAll("\"", "");
+		
 		if("N/A".equalsIgnoreCase(splitted[2]))
 			bbid = 0;
 		else 

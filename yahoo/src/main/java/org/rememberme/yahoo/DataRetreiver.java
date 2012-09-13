@@ -28,16 +28,15 @@ public class DataRetreiver {
 			
 			url = new URL(
 		"http://finance.yahoo.com/d/quotes.csv?s="+cac40()+"&f=snb3b6a5b2");
-//			"http://download.finance.yahoo.com/d/quotes.csv?s="+cac40()+"&f=snohgv");
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					url.openStream()));
 			
 			String inputLine;
 			while ((inputLine = in.readLine()) != null){
-				log.info(inputLine);
 				Stock stock = new Stock();
 				stock.parse(inputLine);
 				connector.insert_market_data(stock);
+				log.info(stock);
 			}
 			
 			in.close();
