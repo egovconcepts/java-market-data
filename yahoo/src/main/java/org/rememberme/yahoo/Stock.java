@@ -56,10 +56,10 @@ public class Stock implements Comparable<Stock>{
 		else
 			bask = Double.parseDouble(splitted[5]);
 	}
-
+	
 	@Override
 	public String toString() {
-		return name + " " + description + " " + bbid + " " + qbid + " " + qask + " " + bask; 
+		return name + " " + description + " " + qbid  + " " + bbid + " " + bask + " " + qask ; 
 	}
 	
 	public double getBask() {
