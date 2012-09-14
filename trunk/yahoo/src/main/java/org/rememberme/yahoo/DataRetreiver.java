@@ -23,15 +23,18 @@ public class DataRetreiver {
 		stockManager = new StockManager();
 	}
 
+	private String yahooTicker;
+	
 	public void init() throws SQLException, IOException, InterruptedException{
 		connector.init();
 		
+		yahooTicker = loadYahooTicker();
+		
 		while (true) {
-			Thread.sleep(1000);
+//			Thread.sleep(1000);
 			
 			url = new URL(
-//		"http://finance.yahoo.com/d/quotes.csv?s="+cac40()+"&f=snb3b6a5b2");
-		"http://finance.yahoo.com/d/quotes.csv?s="+loadYahooTicker()+"&f=snb3b6a5b2");
+		"http://finance.yahoo.com/d/quotes.csv?s="+yahooTicker+"&f=snb3b6a5b2");
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					url.openStream()));
 			
