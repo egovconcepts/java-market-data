@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
@@ -29,7 +30,8 @@ public class DataRetreiver {
 			Thread.sleep(1000);
 			
 			url = new URL(
-		"http://finance.yahoo.com/d/quotes.csv?s="+cac40()+"&f=snb3b6a5b2");
+//		"http://finance.yahoo.com/d/quotes.csv?s="+cac40()+"&f=snb3b6a5b2");
+		"http://finance.yahoo.com/d/quotes.csv?s="+loadYahooTicker()+"&f=snb3b6a5b2");
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					url.openStream()));
 			
@@ -78,6 +80,20 @@ public class DataRetreiver {
 		log.info(server + " " + port + " " + dbName + " " + dblogin + " " + dbPwd);
 		
 		dr.init();
+	}
+	
+	private String loadYahooTicker(){
+		List<String> yahooTickers = connector.loadStockDB();
+		
+		if(yahooTickers==null)
+			throw new RuntimeException("No Stock to be loaded from DB");
+		
+		StringBuilder sb = new StringBuilder();
+		for(String yahooTicker:yahooTickers){
+			sb.append(yahooTicker).append("+");
+		}
+		
+		return sb.toString();
 	}
 	
 	private String cac40(){

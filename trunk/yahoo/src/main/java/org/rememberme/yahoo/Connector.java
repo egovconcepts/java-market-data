@@ -4,8 +4,12 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -55,6 +59,21 @@ public class Connector {
 		insertStock = conn.prepareStatement(request);
 	}
 	
+	public List<String> loadStockDB(){
+		String request = "SELECT YAHOO_NAME FROM STOCK";
+		List<String> result = new ArrayList<String>();
+		try {
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery(request);
+			while(rs.next()){
+				String yahooTicker = rs.getString("YAHOO_NAME");
+				result.add(yahooTicker);
+			}
+		} catch (SQLException e) {
+			return null;
+		}
+		return result;
+	}
 	
 	public void insert_market_data(Stock stock){
 		java.util.Date d = new java.util.Date();
