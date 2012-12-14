@@ -51,10 +51,10 @@ public class DataRetreiver {
 
                 boolean isNewStock = stockManager.addStock(stock);
                 if (isNewStock) {
-//                    connector.insert_market_data(stock);
-//                    log.info("NEW " + stock);
+                    connector.insert_market_data(stock);
+                    log.info("NEW " + stock);
                 } else {
-//                    log.info("OLD " + stock);
+                    log.info("OLD " + stock);
                 }
             }
             in.close();
