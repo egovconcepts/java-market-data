@@ -54,7 +54,7 @@ public class DataRetreiver {
                     connector.insert_market_data(stock);
                     log.info("NEW " + stock);
                 } else {
-                    log.info("OLD " + stock);
+                    log.debug("OLD " + stock);
                 }
             }
             in.close();
