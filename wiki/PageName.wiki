@@ -1,13 +1,15 @@
-#summary One-sentence summary of this page.
+#Introducing the market data collector
 
 = Introduction =
 
 Download yahoo market data.
-Java + maven
+The technology used is *core Java* with maven.
 
 = Details =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+The goals is to provide a framework/application that will allow the user to do market analysis at the cheapest cost.
+
+In the first steps it will include :
+  * To retrieve market data from the internet ( currently from yahoo feed )
+  * To build a framework for backtesting of trading strategy.
+  * To build a Frontend to manage the application.
