@@ -43,7 +43,7 @@ public class DataRetreiver {
                 Stock stock = null;
                 if (countNumberOfComma(inputLine) != 5) {
                     String ticker = inputLine.split(",")[0];
-                    buildStockFromScratch(ticker);
+                    stock = buildStockFromScratch(ticker);
                 } else {
                     stock = new Stock();
                     stock.parse(inputLine);
@@ -71,7 +71,7 @@ public class DataRetreiver {
         String bbidStr = grabIndividualInfo(yahooTicker, "b3");
         bbidStr = bbidStr.replaceAll(",", "");
         double bbid = 0;
-        if ("N/A".equalsIgnoreCase(bbidStr)) {
+        if (!"N/A".equalsIgnoreCase(bbidStr)) {
             bbid = Double.parseDouble(bbidStr);
         }
 //        log.info("bid " + bbid);
@@ -79,7 +79,7 @@ public class DataRetreiver {
         String qbidStr = grabIndividualInfo(yahooTicker, "b6");
         qbidStr = qbidStr.replaceAll(",", "");
         long qbid = 0;
-        if ("N/A".equalsIgnoreCase(qbidStr)) {
+        if (!"N/A".equalsIgnoreCase(qbidStr)) {
             qbid = Long.parseLong(qbidStr);
         }
 
@@ -87,7 +87,7 @@ public class DataRetreiver {
         String qaskStr = grabIndividualInfo(yahooTicker, "a5");
         qaskStr = qaskStr.replaceAll(",", "");
         long qask = 0;
-        if ("N/A".equalsIgnoreCase(qaskStr)) {
+        if (!"N/A".equalsIgnoreCase(qaskStr)) {
             qask = Long.parseLong(qaskStr);
         }
 //        log.info("askSize " + qask);
@@ -95,7 +95,7 @@ public class DataRetreiver {
         String baskStr = grabIndividualInfo(yahooTicker, "b2");
         baskStr = baskStr.replaceAll(",", "");
         double bask = 0;
-        if ("N/A".equalsIgnoreCase(baskStr)) {
+        if (!"N/A".equalsIgnoreCase(baskStr)) {
             bask = Double.parseDouble(baskStr);
         }
 //        log.info("askSize " + bask);
@@ -109,7 +109,7 @@ public class DataRetreiver {
 
     private String grabIndividualInfo(String ticker, String yahooSpecialTag) throws MalformedURLException, IOException {
         URL _url = new URL(
-                "http://finance.yahoo.com/d/quotes.csv?s=" + yahooTicker + "&f=" + yahooSpecialTag);
+                "http://finance.yahoo.com/d/quotes.csv?s=" + ticker + "&f=" + yahooSpecialTag);
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 _url.openStream()));
 
@@ -117,7 +117,8 @@ public class DataRetreiver {
 //        log.info(" -- " + inputLine);
         in.close();
 
-        return inputLine.split(",")[0];
+//        return inputLine.split(",")[0];
+        return inputLine;
     }
 
     private int countNumberOfComma(String inputStream) {
