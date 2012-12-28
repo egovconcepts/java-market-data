@@ -3,14 +3,14 @@
 
 = Introduction =
 
-Download yahoo market data.
-The technology used is *core Java* with maven.
+* Download and serialize yahoo market data into a MYSQL database.
+* The technology used is *core Java* with maven.
+* Minimum Hardware cost ( an old Linux server with some hard drive space should be sufficient ).
 
 = Details =
 
-The goals is to provide a framework/application that will allow the user to do market analysis at the cheapest cost.
+The goals is to extract market data information from the yahoo website and serialized them into a MySQL database. ( could be used as an analysis/strategies tester database )
 
 In the first steps it will include :
-  * To retrieve market data from the internet ( currently from yahoo feed )
-  * To build a framework for backtesting of trading strategy.
-  * To build a Frontend to manage the application.
+  * To retrieve yahoo market data from the internet.
+  * To build a front end to manage the application.
