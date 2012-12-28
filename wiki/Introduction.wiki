@@ -1,11 +1,11 @@
+#summary Introducing the market data collector
 #labels Featured
-#Introducing the market data collector
 
 = Introduction =
 
-* Download and serialize yahoo market data into a MYSQL database.
-* The technology used is *core Java* with maven.
-* Minimum Hardware cost ( an old Linux server with some hard drive space should be sufficient ).
+  * Download and serialize yahoo market data into a MYSQL database.
+  * The technology used is *core Java* with maven.
+  * Minimum Hardware cost ( an old Linux server with some hard drive space should be sufficient ).
 
 = Details =
 
