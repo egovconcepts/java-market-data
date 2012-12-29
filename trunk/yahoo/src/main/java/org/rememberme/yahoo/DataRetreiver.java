@@ -41,15 +41,15 @@ public class DataRetreiver {
                 log.info(inputLine);
 //                log.info(countNumberOfComma(inputLine));
                 Stock stock = null;
-                if (countNumberOfComma(inputLine) != 5) {
+                if (countNumberOfComma(inputLine) != 7) {
                     String ticker = inputLine.split(",")[0];
-                    
-                    try{
+
+                    try {
                         stock = buildStockFromScratch(ticker);
-                    }catch(IOException ioe){
+                    } catch (IOException ioe) {
                         continue;
                     }
-                    
+
                 } else {
                     stock = new Stock();
                     stock.parse(inputLine);
@@ -106,10 +106,15 @@ public class DataRetreiver {
         }
 //        log.info("askSize " + bask);
 
+        String lastTradeDate = grabIndividualInfo(yahooTicker, "d1");
+        String lastTradeTime = grabIndividualInfo(yahooTicker, "t1");
+
         name = name.replaceAll("\"", "");
         description = description.replaceAll("\"", "");
+        lastTradeDate = lastTradeDate.replaceAll("\"", "");
+        lastTradeTime = lastTradeTime.replaceAll("\"", "");
 
-        Stock stock = new Stock(name, description, bbid, qbid, qask, bask);
+        Stock stock = new Stock(name, description, bbid, qbid, qask, bask, lastTradeDate, lastTradeTime);
         return stock;
     }
 
@@ -136,6 +141,21 @@ public class DataRetreiver {
         this.connector = connector;
     }
 
+    private String loadYahooTicker() {
+        List<String> yahooTickers = connector.loadStockDB();
+
+        if (yahooTickers == null) {
+            throw new RuntimeException("No Stock to be loaded from DB");
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (String yahooTicker : yahooTickers) {
+            sb.append(yahooTicker).append("+");
+        }
+
+        return sb.toString();
+    }
+
     public static void main(String[] args) throws IOException,
             InterruptedException, SQLException {
         DataRetreiver dr = new DataRetreiver();
@@ -159,69 +179,5 @@ public class DataRetreiver {
         log.info(server + " " + port + " " + dbName + " " + dblogin + " " + dbPwd);
 
         dr.init();
-    }
-
-    private String loadYahooTicker() {
-        List<String> yahooTickers = connector.loadStockDB();
-
-        if (yahooTickers == null) {
-            throw new RuntimeException("No Stock to be loaded from DB");
-        }
-
-        StringBuilder sb = new StringBuilder();
-        for (String yahooTicker : yahooTickers) {
-            sb.append(yahooTicker).append("+");
-        }
-
-        return sb.toString();
-    }
-
-    private String cac40() {
-//		http://en.wikipedia.org/wiki/CAC_40
-        StringBuilder sb = new StringBuilder();
-        sb.append("AC.PA").append("+"); // Accor Paris
-//                .append("419919.PA").append("+") // Air Liquide Paris
-//                .append("ALU.PA").append("+") // Alcatel Lucent
-//                .append("ALO.PA").append("+") // Alstom SA
-//                .append("MT.PA").append("+") // Arcelor Mittal
-//                .append("CS.PA").append("+") // Axa
-//                .append("BNP.PA").append("+") // BNP
-//                .append("EN.PA").append("+") // Bouygue
-//                .append("CAP.PA").append("+") // Cap Gemini
-//                .append("CA.PA").append("+") // Carrefour
-//                .append("ACA.PA").append("+")
-//                .append("EAD.PA").append("+")
-//                .append("EDF.PA").append("+")
-//                .append("EI.PA").append("+")
-//                .append("FTE.PA").append("+")
-//                .append("GSZ.PA").append("+")
-//                .append("BN.PA").append("+")
-//                .append("OR.PA").append("+")
-//                .append("LG.PA").append("+")
-//                .append("LR.PA").append("+")
-//                .append("MC.PA").append("+")
-//                .append("ML.PA").append("+")
-//                .append("ML.PA").append("+")
-//                .append("RI.PA").append("+")
-//                .append("UG.PA").append("+")
-//                .append("PP.PA").append("+")
-//                .append("PUB.PA").append("+")
-//                .append("RNO.PA").append("+")
-//                .append("SAF.PA").append("+")
-//                .append("SGO.PA").append("+")
-//                .append("SAN.PA").append("+")
-//                .append("SU.PA").append("+")
-//                .append("GLE.PA").append("+")
-//                .append("STM.PA").append("+")
-//                .append("TEC.PA").append("+")
-//                .append("FP.PA").append("+")
-//                .append("UL.PA").append("+")
-//                .append("VK.PA").append("+")
-//                .append("VIE.PA").append("+")
-//                .append("DG.PA").append("+")
-//                .append("VIV.PA").append("+");
-//			.append("^FCHI");			
-
-        return sb.toString();
     }
 }
