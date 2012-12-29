@@ -23,8 +23,9 @@ public class StockManager {
 			
 			Stock previous = null;
 			for(Stock st : previousStocks){
-				if(0==compareStockByName.compare(stock,st))
-					previous = st;
+				if(0==compareStockByName.compare(stock,st)) {
+                                previous = st;
+                            }
 			}
 			if(previous!=null){
 				previousStocks.remove(previous);
@@ -45,13 +46,4 @@ public class StockManager {
 	public List<Stock> getPreviousStocks() {
 		return previousStocks;
 	}
-	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
 }
