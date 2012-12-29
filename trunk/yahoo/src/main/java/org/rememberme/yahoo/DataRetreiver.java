@@ -32,7 +32,7 @@ public class DataRetreiver {
         while (true) {
 //			Thread.sleep(1000);
             url = new URL(
-                    "http://finance.yahoo.com/d/quotes.csv?s=" + yahooTicker + "&f=snb3b6a5b2");
+                    "http://finance.yahoo.com/d/quotes.csv?s=" + yahooTicker + "&f=snb3b6a5b2d1t1");
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     url.openStream()));
 
@@ -43,7 +43,13 @@ public class DataRetreiver {
                 Stock stock = null;
                 if (countNumberOfComma(inputLine) != 5) {
                     String ticker = inputLine.split(",")[0];
-                    stock = buildStockFromScratch(ticker);
+                    
+                    try{
+                        stock = buildStockFromScratch(ticker);
+                    }catch(IOException ioe){
+                        continue;
+                    }
+                    
                 } else {
                     stock = new Stock();
                     stock.parse(inputLine);
