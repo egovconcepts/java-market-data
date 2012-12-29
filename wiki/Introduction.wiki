@@ -14,3 +14,5 @@ The goals is to extract market data information from the yahoo website and seria
 In the first steps it will include :
   * To retrieve yahoo market data from the internet.
   * To build a front end to manage the application.
+
+The details to download market data could be found [http://www.gummy-stuff.org/Yahoo-data.htm here].
