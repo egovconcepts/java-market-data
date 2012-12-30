@@ -34,7 +34,6 @@ public class Stock implements Comparable<Stock> {
         description = splitted[1];
 
 //		remove the " at the beginning and at the end of the name and the description fields.
-
         name = name.replaceAll("\"", "");
         description = description.replaceAll("\"", "");
 
