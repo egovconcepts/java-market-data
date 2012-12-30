@@ -1,4 +1,4 @@
-# Quick start guide
+#summary Quick start guide
 
 = Introduction =
 
