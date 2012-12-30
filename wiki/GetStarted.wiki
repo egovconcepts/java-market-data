@@ -1,18 +1,12 @@
 #summary Quick start guide
 
-= Introduction =
-
-Quick start guide
-
-= Details =
-
-== Tools ==
+= Tools =
 
  * MySQL database
  * Java *jdk*
  * [http://maven.apache.org/ Maven]
 
-== Steps ==
+= Steps =
 
  * Download the code from the source page.
  * Use *_mvn assembly:assembly_* command at the pom level.
