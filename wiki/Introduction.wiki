@@ -1,5 +1,6 @@
-#summary Introducing the market data collector
+#summary Introducing the market data retriever
 #labels Featured
+#sidebar TableOfContents
 
 = Introduction =
 
