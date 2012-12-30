@@ -13,13 +13,13 @@ public class StockManager {
 	}
 	
 	/*
-	 * return true if the stock has never been processed.
+	 * @return true if the stock should be serialized.
 	 */
-	public boolean addStock(Stock stock){
+	public boolean addStockInDB(Stock stock){
 		boolean result = true;
 		if(previousStocks.contains(stock)){
-			return false;
-		}else{
+			result = false;
+		} else {
 			
 			Stock previous = null;
 			for(Stock st : previousStocks){
@@ -27,9 +27,12 @@ public class StockManager {
                                 previous = st;
                             }
 			}
-			if(previous!=null){
+			if(previous==null){
+                            result = false;
+			}else{
 				previousStocks.remove(previous);
-			}
+                        }
+                        
 			previousStocks.add(stock);
 		}
 		return result;

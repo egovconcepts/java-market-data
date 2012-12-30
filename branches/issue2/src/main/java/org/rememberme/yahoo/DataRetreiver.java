@@ -54,7 +54,7 @@ public class DataRetreiver {
                     stock.parse(inputLine);
                 }
 
-                boolean toBeAddedStock = stockManager.addStock(stock);
+                boolean toBeAddedStock = stockManager.addStockInDB(stock);
                 if (toBeAddedStock) {
                     connector.insert_market_data(stock);
                     log.info("Add " + stock);
