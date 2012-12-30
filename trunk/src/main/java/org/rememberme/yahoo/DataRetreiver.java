@@ -39,7 +39,6 @@ public class DataRetreiver {
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 log.info(inputLine);
-//                log.info(countNumberOfComma(inputLine));
                 Stock stock = null;
                 if (countNumberOfComma(inputLine) != 7) {
                     String ticker = inputLine.split(",")[0];
@@ -55,12 +54,12 @@ public class DataRetreiver {
                     stock.parse(inputLine);
                 }
 
-                boolean isNewStock = stockManager.addStock(stock);
-                if (isNewStock) {
+                boolean toBeAddedStock = stockManager.addStock(stock);
+                if (toBeAddedStock) {
                     connector.insert_market_data(stock);
-                    log.info("NEW " + stock);
+                    log.info("Add " + stock);
                 } else {
-                    log.debug("OLD " + stock);
+                    log.debug("AddNot " + stock);
                 }
             }
             in.close();
@@ -68,11 +67,8 @@ public class DataRetreiver {
     }
 
     private Stock buildStockFromScratch(String yahooTicker) throws MalformedURLException, IOException {
-//        log.error(yahooTicker);
-//        "http://finance.yahoo.com/d/quotes.csv?s=" + yahooTicker + "&f=snb3b6a5b2");
         String name = yahooTicker;
         String description = grabIndividualInfo(yahooTicker, "n");
-//        log.info("name " + name);
 
         String bbidStr = grabIndividualInfo(yahooTicker, "b3");
         bbidStr = bbidStr.replaceAll(",", "");
@@ -80,7 +76,6 @@ public class DataRetreiver {
         if (!"N/A".equalsIgnoreCase(bbidStr)) {
             bbid = Double.parseDouble(bbidStr);
         }
-//        log.info("bid " + bbid);
 
         String qbidStr = grabIndividualInfo(yahooTicker, "b6");
         qbidStr = qbidStr.replaceAll(",", "");
@@ -89,14 +84,12 @@ public class DataRetreiver {
             qbid = Long.parseLong(qbidStr);
         }
 
-//        log.info("bidSize " + qbid);
         String qaskStr = grabIndividualInfo(yahooTicker, "a5");
         qaskStr = qaskStr.replaceAll(",", "");
         long qask = 0;
         if (!"N/A".equalsIgnoreCase(qaskStr)) {
             qask = Long.parseLong(qaskStr);
         }
-//        log.info("askSize " + qask);
 
         String baskStr = grabIndividualInfo(yahooTicker, "b2");
         baskStr = baskStr.replaceAll(",", "");
@@ -104,7 +97,6 @@ public class DataRetreiver {
         if (!"N/A".equalsIgnoreCase(baskStr)) {
             bask = Double.parseDouble(baskStr);
         }
-//        log.info("askSize " + bask);
 
         String lastTradeDate = grabIndividualInfo(yahooTicker, "d1");
         String lastTradeTime = grabIndividualInfo(yahooTicker, "t1");
@@ -125,10 +117,8 @@ public class DataRetreiver {
                 _url.openStream()));
 
         String inputLine = in.readLine();
-//        log.info(" -- " + inputLine);
         in.close();
 
-//        return inputLine.split(",")[0];
         return inputLine;
     }
 
