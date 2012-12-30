@@ -1,0 +1,20 @@
+# Quick start guide
+
+= Introduction =
+
+Quick start guide
+
+= Details =
+
+== Tools ==
+
+ * MySQL database
+ * Java *jdk*
+ * [http://maven.apache.org/ Maven]
+
+== Steps ==
+
+ * Download the code from the source page.
+ * Use *_mvn assembly:assembly_* command at the pom level.
+
+java -jar yahoo-0.0.5-SNAPSHOT-jar-with-dependencies.jar *dbhost dbport dbname YAHOO_MARKET_DATA dbuser dbpwd*
