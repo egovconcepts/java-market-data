@@ -4,10 +4,10 @@
 
   <groupId>org.rememberme</groupId>
   <artifactId>yahoo</artifactId>
-  <version>0.0.5-SNAPSHOT</version>
+  <version>0.0.6-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>yahoo</name>
+  <name>yahoo-market-data</name>
   <url>http://maven.apache.org</url>
 
   <properties>

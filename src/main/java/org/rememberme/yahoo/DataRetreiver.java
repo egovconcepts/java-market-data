@@ -41,20 +41,23 @@ public class DataRetreiver {
                 log.info(inputLine);
                 Stock stock = null;
                 if (countNumberOfComma(inputLine) != 7) {
+                    log.debug("buildFromScratch");
                     String ticker = inputLine.split(",")[0];
 
                     try {
                         stock = buildStockFromScratch(ticker);
                     } catch (IOException ioe) {
+                        log.debug("buildFromScratch of " + ticker + " failed ");
                         continue;
                     }
 
                 } else {
+                    log.debug("build from stream");
                     stock = new Stock();
                     stock.parse(inputLine);
                 }
 
-                boolean toBeAddedStock = stockManager.addStock(stock);
+                boolean toBeAddedStock = stockManager.addStockInDB(stock);
                 if (toBeAddedStock) {
                     connector.insert_market_data(stock);
                     log.info("Add " + stock);
@@ -151,7 +154,7 @@ public class DataRetreiver {
         DataRetreiver dr = new DataRetreiver();
 
         if (args.length < 5) {
-            log.info("usage : server port dbname dblogin dbpwd");
+            log.info("usage : server port dbname tableName dblogin dbpwd");
             return;
         }
 
