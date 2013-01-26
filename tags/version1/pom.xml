@@ -4,7 +4,7 @@
 
   <groupId>org.rememberme</groupId>
   <artifactId>yahoo</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>jar</packaging>
 
   <name>yahoo-market-data</name>
