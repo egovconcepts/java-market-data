@@ -9,13 +9,13 @@ public class StockManager {
     private List<Stock> previousStocks;
 
     public StockManager() {
-        previousStocks = new ArrayList<Stock>();
+        previousStocks = new ArrayList<>();
     }
 
     /*
      * @return true if the stock should be serialized.
      */
-    public boolean addStockInDB(Stock stock) {
+    public synchronized boolean addStockInDB(Stock stock) {
         boolean result = true;
         if (previousStocks.contains(stock)) {
             result = false;
@@ -27,6 +27,7 @@ public class StockManager {
                     previous = st;
                 }
             }
+            
             if (previous == null) {
                 result = false;
             } else {
