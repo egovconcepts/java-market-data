@@ -79,8 +79,8 @@ public class Connector {
     private DateFormat lastTradeDateFormat = new SimpleDateFormat("MM/dd/yyyy");
     private DateFormat lastTradeTimeFormat = new SimpleDateFormat("HH:mm");
 
-    public void insert_market_data(Stock stock) {
-        java.util.Date d = new java.util.Date();
+    public void insert_market_data(Stock stock, long timeStamp) {
+        java.util.Date d = new java.util.Date(timeStamp);
         try {
             insertStock.setDate(1, new Date(d.getTime()));
             insertStock.setTime(2, new Time(d.getTime()));
