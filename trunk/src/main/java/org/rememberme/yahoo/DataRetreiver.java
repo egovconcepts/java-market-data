@@ -51,7 +51,8 @@ public class DataRetreiver {
                 concurrentInputStrings.put(istr);
             }
 
-            loInputYahooDatas = null;
+            Thread.sleep(1000);
+
         }
     }
 
