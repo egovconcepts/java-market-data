@@ -59,21 +59,16 @@ public class DataSerializerManager implements Runnable {
         }
 
         public void run() {
-            System.out.println(Thread.currentThread().getName() + " " + inputString.getYahooString());
+            log.debug(Thread.currentThread().getName() + " " + inputString.getYahooString());
             add(inputString);
         }
 
         private void add(InputYahooData inputYahooData) {
             Stock stock = null;
-            if (countNumberOfComma(inputYahooData.getYahooString()) != 7) {
-                log.debug("buildFromScratch");
-                String ticker = inputYahooData.getYahooString().split(",")[0];
 
-                try {
-                    stock = buildStockFromScratch(ticker);
-                } catch (IOException ioe) {
-                    log.debug("buildFromScratch of " + ticker + " failed ");
-                }
+            if (countNumberOfComma(inputYahooData.getYahooString()) != 7) {
+                log.debug("Not processed because the number of comma <> 7");
+                return;
 
             } else {
                 log.debug("build from stream");
@@ -95,60 +90,5 @@ public class DataSerializerManager implements Runnable {
             return st.length - 1;
         }
 
-        private Stock buildStockFromScratch(String yahooTicker) throws MalformedURLException, IOException {
-            String name = yahooTicker;
-            String description = grabIndividualInfo(yahooTicker, "n");
-
-            String bbidStr = grabIndividualInfo(yahooTicker, "b3");
-            bbidStr = bbidStr.replaceAll(",", "");
-            double bbid = 0;
-            if (!"N/A".equalsIgnoreCase(bbidStr)) {
-                bbid = Double.parseDouble(bbidStr);
-            }
-
-            String qbidStr = grabIndividualInfo(yahooTicker, "b6");
-            qbidStr = qbidStr.replaceAll(",", "");
-            long qbid = 0;
-            if (!"N/A".equalsIgnoreCase(qbidStr)) {
-                qbid = Long.parseLong(qbidStr);
-            }
-
-            String qaskStr = grabIndividualInfo(yahooTicker, "a5");
-            qaskStr = qaskStr.replaceAll(",", "");
-            long qask = 0;
-            if (!"N/A".equalsIgnoreCase(qaskStr)) {
-                qask = Long.parseLong(qaskStr);
-            }
-
-            String baskStr = grabIndividualInfo(yahooTicker, "b2");
-            baskStr = baskStr.replaceAll(",", "");
-            double bask = 0;
-            if (!"N/A".equalsIgnoreCase(baskStr)) {
-                bask = Double.parseDouble(baskStr);
-            }
-
-            String lastTradeDate = grabIndividualInfo(yahooTicker, "d1");
-            String lastTradeTime = grabIndividualInfo(yahooTicker, "t1");
-
-            name = name.replaceAll("\"", "");
-            description = description.replaceAll("\"", "");
-            lastTradeDate = lastTradeDate.replaceAll("\"", "");
-            lastTradeTime = lastTradeTime.replaceAll("\"", "");
-
-            Stock stock = new Stock(name, description, bbid, qbid, qask, bask, lastTradeDate, lastTradeTime);
-            return stock;
-        }
-
-        private String grabIndividualInfo(String ticker, String yahooSpecialTag) throws MalformedURLException, IOException {
-            URL _url = new URL(
-                    "http://finance.yahoo.com/d/quotes.csv?s=" + ticker + "&f=" + yahooSpecialTag);
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    _url.openStream()));
-
-            String inputLine = in.readLine();
-            in.close();
-
-            return inputLine;
-        }
     }
 }
