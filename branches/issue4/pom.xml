@@ -7,7 +7,7 @@
   <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>yahoo-market-data</name>
+  <name>yahoo-market-data-issue4</name>
   <url>http://maven.apache.org</url>
 
   <properties>
