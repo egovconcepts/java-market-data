@@ -19,15 +19,15 @@ import org.apache.log4j.Logger;
 
 public class Connector {
 
-    Connection conn = null;
-    String url;
-    String dbName;
-    String tableName;
-    String driver = "com.mysql.jdbc.Driver";
-    String userName;
-    String password;
-    PreparedStatement insertStock;
-    private static Logger log = Logger.getLogger(Connector.class);
+    private Connection conn = null;
+    private String url;
+    private String dbName;
+    private String tableName;
+    private final String driver = "com.mysql.jdbc.Driver";
+    private String userName;
+    private String password;
+    private PreparedStatement insertStock;
+    private static final Logger log = Logger.getLogger(Connector.class);
 
     public Connector() {
     }
@@ -63,7 +63,7 @@ public class Connector {
 
     public List<String> loadStockDB() {
         String request = "SELECT YAHOO_NAME FROM STOCK";
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         try {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(request);
@@ -76,8 +76,8 @@ public class Connector {
         }
         return result;
     }
-    private DateFormat lastTradeDateFormat = new SimpleDateFormat("MM/dd/yyyy");
-    private DateFormat lastTradeTimeFormat = new SimpleDateFormat("HH:mm");
+    private final DateFormat lastTradeDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    private final DateFormat lastTradeTimeFormat = new SimpleDateFormat("HH:mm");
 
     public void insert_market_data(Stock stock, long timeStamp) {
         java.util.Date d = new java.util.Date(timeStamp);
@@ -108,7 +108,7 @@ public class Connector {
         }
     }
 
-    private String removeAmPm(String time) throws ParseException {
+    private String removeAmPm(String time) {
         if (time.contains("pm")) {
             time = time.replaceAll("pm", "");
             String[] tmp = time.split(":");
@@ -116,17 +116,6 @@ public class Connector {
             return t + ":" + tmp[1];
         } else {
             return time.replaceAll("am", "");
-//            return lastTradeTimeFormat.parse(time);
-        }
-    }
-
-    private java.util.Date amPm(String time) throws ParseException {
-        if (time.contains("pm")) {
-            String[] tmp = time.split(":");
-            int t = Integer.parseInt(tmp[0]) + 12;
-            return lastTradeTimeFormat.parse(t + ":" + tmp[1]);
-        } else {
-            return lastTradeTimeFormat.parse(time);
         }
     }
 }
