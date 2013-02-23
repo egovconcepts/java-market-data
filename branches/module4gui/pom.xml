@@ -5,14 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.rememberme</groupId>
-    <artifactId>yahoo-md</artifactId>
+    <artifactId>yahoomd</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0-SNAPSHOT</version>
-    <name>yahoo-md-parent</name>
+    <version>1.0.0</version>
+    <name>yahoomd</name>
 
     <modules>
-        <module>yahoo-md-retreiver</module>
-        <module>yahoo-md-gui</module>
+        <module>retreiver</module>
+        <module>gui</module>
     </modules>
 
     <build>
