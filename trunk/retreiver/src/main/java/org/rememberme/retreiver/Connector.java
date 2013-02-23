@@ -75,6 +75,7 @@ public class Connector {
         }
         return result;
     }
+    
     private final DateFormat lastTradeDateFormat = new SimpleDateFormat("MM/dd/yyyy");
     private final DateFormat lastTradeTimeFormat = new SimpleDateFormat("HH:mm");
 
@@ -116,5 +117,9 @@ public class Connector {
         } else {
             return time.replaceAll("am", "");
         }
+    }
+
+    public Connection getConn() {
+        return conn;
     }
 }
