@@ -52,7 +52,6 @@ public class DataRetreiver {
             }
 
             Thread.sleep(1000);
-
         }
     }
 
