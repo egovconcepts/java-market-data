@@ -1,4 +1,4 @@
-package org.rememberme.yahoo.server;
+package org.rememberme.retreiver.server;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,10 +1,9 @@
-package org.rememberme.yahoo.server;
+package org.rememberme.retreiver.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-import org.rememberme.yahoo.Stock;
+import org.rememberme.retreiver.Stock;
 
 public class Server implements Runnable {
 

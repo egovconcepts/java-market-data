@@ -1,4 +1,4 @@
-package org.rememberme.yahoo.server;
+package org.rememberme.retreiver.server;
 
 public interface Client<M> {
 

@@ -1,4 +1,4 @@
-package org.rememberme.yahoo.server;
+package org.rememberme.retreiver.server;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -7,9 +7,7 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
-
-import org.rememberme.yahoo.Stock;
-
+import org.rememberme.retreiver.Stock;
 
 /**
  * not thread safe ..

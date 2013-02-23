@@ -2,7 +2,8 @@ package org.rememberme.yahoo;
 
 import static org.junit.Assert.*;
 
-import org.junit.Test;
+import org.rememberme.retreiver.Stock;
+import org.rememberme.retreiver.StockManager;
 
 public class StockManagerTest {
 
