@@ -1,4 +1,4 @@
-package org.rememberme.yahoo;
+package org.rememberme.yahoo-md-retreiver;
 
 import java.io.BufferedReader;
 import java.io.IOException;

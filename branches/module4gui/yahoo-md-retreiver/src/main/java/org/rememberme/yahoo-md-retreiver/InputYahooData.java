@@ -1,4 +1,4 @@
-package org.rememberme.yahoo;
+package org.rememberme.yahoo-md-retreiver;
 
 /**
  *

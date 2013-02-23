@@ -2,12 +2,19 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.rememberme</groupId>
-  <artifactId>yahoo</artifactId>
+
+  <groupId>org.rememberme.yahoo-md-retreiver</groupId>
+  <artifactId>yahoo-md-retreiver</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>module4gui</name>
+  <parent>
+    <groupId>org.rememberme</groupId>
+    <artifactId>yahoo-md</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+  </parent>
+  
+  <name>yahoo-md-retreiver</name>
   <url>http://maven.apache.org</url>
 
   <properties>
