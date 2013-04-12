@@ -25,7 +25,7 @@ public class RequestDB {
 
     public List<SimpleStockGUI> retreiveStockList() {
         List<SimpleStockGUI> result = new ArrayList<>();
-        String request = "Select * from stock";
+        String request = "Select * from STOCK";
         try {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(request);
