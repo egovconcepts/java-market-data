@@ -49,11 +49,6 @@ public class DataRetreiver {
         }
     }
 
-    private void serializeRawData(InputYahooData yahooData) {
-        
-    }
-    
-    
     private void serializeStock(InputYahooData yahooData) {
         Stock stock = null;
         boolean serializedFlag = false;
