@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
 
 public class Connector {
@@ -26,6 +27,7 @@ public class Connector {
     private String userName;
     private String password;
     private PreparedStatement insertStock;
+    private PreparedStatement insertRawData;
     private static final Logger log = Logger.getLogger(Connector.class);
 
     public Connector() {
@@ -58,6 +60,9 @@ public class Connector {
 
         String request = "insert into " + tableName + " (DATE,TIME,STOCK_NAME,STOCK_DES,BBID,BQTY,AQTY,BASK,LAST_TRADE_DATE,LAST_TRADE_TIME) values (?,?,?,?,?,?,?,?,?,?)";
         insertStock = conn.prepareStatement(request);
+        
+        String rawDataRequest = "insert into yahoo_raw_data (DATE,TIME,YAHOO_RAW_DATA,SERIALIZED) values (?,?,?,?)";
+        insertRawData = conn.prepareStatement(rawDataRequest);
     }
 
     public List<String> loadStockDB() {
@@ -79,6 +84,20 @@ public class Connector {
     private final DateFormat lastTradeDateFormat = new SimpleDateFormat("MM/dd/yyyy");
     private final DateFormat lastTradeTimeFormat = new SimpleDateFormat("HH:mm");
 
+    public void insert_raw_data(String rawData,long timeStamp,boolean serialized){
+        java.util.Date d = new java.util.Date(timeStamp);
+        
+        try {
+            insertRawData.setDate(1, new Date(d.getTime()));
+            insertRawData.setTime(2, new Time(d.getTime()));
+            insertRawData.setString(3, rawData);
+            insertRawData.setBoolean(4, serialized);
+            insertRawData.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
     public void insert_market_data(Stock stock, long timeStamp) {
         java.util.Date d = new java.util.Date(timeStamp);
         try {

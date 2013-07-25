@@ -49,10 +49,17 @@ public class DataRetreiver {
         }
     }
 
+    private void serializeRawData(InputYahooData yahooData) {
+        
+    }
+    
+    
     private void serializeStock(InputYahooData yahooData) {
         Stock stock = null;
+        boolean serializedFlag = false;
 
         if (countNumberOfComma(yahooData.getYahooString()) != 7) {
+            
             log.debug("Not processed because the number of comma <> 7");
             return;
 
@@ -60,11 +67,13 @@ public class DataRetreiver {
             log.debug("build from stream");
             stock = new Stock();
             stock.parse(yahooData.getYahooString());
+            serializedFlag = true;
         }
 
         boolean toBeAddedStock = stockManager.addStockInDB(stock);
         if (toBeAddedStock) {
             connector.insert_market_data(stock, yahooData.getTimestamp());
+            connector.insert_raw_data(yahooData.getYahooString(),yahooData.getTimestamp(),serializedFlag);
             log.info("Add " + stock);
         } else {
             log.debug("AddNot " + stock);
