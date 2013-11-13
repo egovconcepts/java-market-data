@@ -15,4 +15,4 @@
  * Download the code from the source page.
  * Use *_mvn assembly:assembly_* command at the pom level.
 
-java -jar yahoo-x.x.x-SNAPSHOT-jar-with-dependencies.jar *dbhost dbport dbname YAHOO_MARKET_DATA dbuser dbpwd*
+java -jar yahoo-x.x.x-SNAPSHOT-jar-with-dependencies.jar
