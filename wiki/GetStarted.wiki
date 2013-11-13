@@ -6,7 +6,6 @@
 
 == Tools ==
 
- * MySQL database
  * Java *jdk*
  * [http://maven.apache.org/ Maven]
 
