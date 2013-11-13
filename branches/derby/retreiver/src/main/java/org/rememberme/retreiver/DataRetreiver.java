@@ -1,11 +1,12 @@
 package org.rememberme.retreiver;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
@@ -28,11 +29,19 @@ public class DataRetreiver {
         List<InputYahooData> loInputYahooDatas;
 
         while (true) {
-            loInputYahooDatas = new LinkedList<>();
+            loInputYahooDatas = new ArrayList<>();
             url = new URL(
                     "http://finance.yahoo.com/d/quotes.csv?s=" + yahooTicker + "&f=snb3b6a5b2d1t1");
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    url.openStream()));
+
+            BufferedReader in = null;
+            try {
+                in = new BufferedReader(new InputStreamReader(
+                        url.openStream()));
+            } catch (FileNotFoundException fnfe) {
+                log.error("File not downloaded from yahoo going to sleep");
+                Thread.sleep(5000);
+                continue;
+            }
 
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
@@ -54,7 +63,7 @@ public class DataRetreiver {
         boolean serializedFlag = false;
 
         if (countNumberOfComma(yahooData.getYahooString()) != 7) {
-            
+
             log.debug("Not processed because the number of comma <> 7");
             return;
 
@@ -68,7 +77,6 @@ public class DataRetreiver {
         boolean toBeAddedStock = stockManager.addStockInDB(stock);
         if (toBeAddedStock) {
             connector.insert_market_data(stock, yahooData.getTimestamp());
-            connector.insert_raw_data(yahooData.getYahooString(),yahooData.getTimestamp(),serializedFlag);
             log.info("Add " + stock);
         } else {
             log.debug("AddNot " + stock);
@@ -103,22 +111,19 @@ public class DataRetreiver {
             InterruptedException, SQLException {
         DataRetreiver dr = new DataRetreiver();
 
-        if (args.length != 6) {
-            log.info("usage : server port dbname tableName dblogin dbpwd");
-            return;
-        }
-
-        String server = args[0];
-        String port = args[1];
-        String dbName = args[2];
-        String tableName = args[3];
-        String dblogin = args[4];
-        String dbPwd = args[5];
-
-        Connector connector = new Connector(server, port, dbName, tableName, dblogin, dbPwd);
+//        if (args.length != 1) {
+//            log.info("usage : database");
+//            return;
+//        }
+//        String server = args[0];
+//        String port = args[1];
+//        String dbName = args[2];
+//        String tableName = args[3];
+//        String dblogin = args[4];
+//        String dbPwd = args[5];
+//        Connector connector = new Connector(server, port, dbName, tableName, dblogin, dbPwd);
+        Connector connector = new Connector();
         dr.setConnector(connector);
-
-        log.info(server + " " + port + " " + dbName + " " + dblogin + " " + dbPwd);
 
         dr.init();
     }
