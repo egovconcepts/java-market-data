@@ -1,6 +1,7 @@
 package org.rememberme.gui;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.HeadlessException;
 import java.sql.SQLException;
 import javax.swing.JFrame;
@@ -29,7 +30,6 @@ public class Main extends JFrame {
         
         StockListPanel stockPanel = new StockListPanel(connector);
         stockPanel.init();
-        
         frame.getContentPane().add(stockPanel, BorderLayout.CENTER);
         frame.pack();
         

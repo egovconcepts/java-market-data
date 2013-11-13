@@ -1,5 +1,7 @@
 package org.rememberme.gui;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -45,7 +47,7 @@ public class StockListPanel extends JPanel {
         scrollPane = new JScrollPane(stockTable);
         stockTable.setFillsViewportHeight(true);
         
-        this.add(scrollPane);
+        this.setLayout(new BorderLayout());
+        this.add(scrollPane,BorderLayout.CENTER);
     }
-    
 }
