@@ -4,7 +4,7 @@
 
 = Introduction =
 
-  * Download and serialize yahoo market data into a MySQL database.
+  * Download and serialize yahoo market data into a MySQL database. (soon to be derby embedded )
   * The technology used is *core Java* with *Maven*.
   * Costless ( an old Linux server with some hard drive space should be sufficient ).
 
