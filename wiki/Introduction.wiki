@@ -4,13 +4,14 @@
 
 = Introduction =
 
-  * Download and serialize yahoo market data into a MySQL database. (soon to be derby embedded )
-  * The technology used is *core Java* with *Maven*.
+  * Download and serialize yahoo market data into a Apache Derby embedded db.
+  * The technology used is *core Java* with *Maven* and *Apache Derby*.
 
 
 = Details =
 
-The goals is to extract market data information from the yahoo website and serialized them into a MySQL database. ( could be used as an analysis/strategies tester database )
+The goals is to extract market data information from the yahoo website and serialized them. The future development should provide graphical interface for stock price visualization.
+
 
 In the first steps it will include :
   * To retrieve yahoo market data from the internet.
