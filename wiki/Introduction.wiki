@@ -6,7 +6,7 @@
 
   * Download and serialize yahoo market data into a MySQL database. (soon to be derby embedded )
   * The technology used is *core Java* with *Maven*.
-  * Costless ( an old Linux server with some hard drive space should be sufficient ).
+
 
 = Details =
 
@@ -16,4 +16,4 @@ In the first steps it will include :
   * To retrieve yahoo market data from the internet.
   * To build a front end to manage the application.
 
-Details on how to specify messages to the yahoo API could be found [http://www.gummy-stuff.org/Yahoo-data.htm here].
+Details on the Yahoo "api" [http://www.gummy-stuff.org/Yahoo-data.htm here].
