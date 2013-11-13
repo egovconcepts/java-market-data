@@ -38,28 +38,20 @@ public class Main extends JFrame {
 
     public static void main(String[] args) throws SQLException {
 
-        if (args.length != 6) {
-            log.info("usage : server port dbname tableName dblogin dbpwd");
-            return;
-        }
-
-        String server = args[0];
-        String port = args[1];
-        String dbName = args[2];
-        String tableName = args[3];
-        String dblogin = args[4];
-        String dbPwd = args[5];
+//        String server = args[0];
+//        String port = args[1];
+//        String dbName = args[2];
+//        String tableName = args[3];
+//        String dblogin = args[4];
+//        String dbPwd = args[5];
 
         Main main = new Main();
 
-        Connector connector = new Connector(server, port, dbName, tableName, dblogin, dbPwd);
+        Connector connector = new Connector();
         connector.init();
-        log.info(server + " " + port + " " + dbName + " " + dblogin + " " + dbPwd);
+//        log.info(server + " " + port + " " + dbName + " " + dblogin + " " + dbPwd);
         main.setConnector(connector);
         main.init();
-
-
-
-
+        
     }
 }
