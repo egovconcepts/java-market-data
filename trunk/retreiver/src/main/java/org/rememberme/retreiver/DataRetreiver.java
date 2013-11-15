@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -58,34 +59,43 @@ public class DataRetreiver {
         }
     }
 
+    public InputYahooData retreiveStock(String yahooTicker) throws MalformedURLException, IOException, FileNotFoundException {
+        URL url = new URL("http://finance.yahoo.com/d/quotes.csv?s=" + yahooTicker + "&f=snb3b6a5b2d1t1");
+        BufferedReader in = null;
+        in = new BufferedReader(new InputStreamReader(url.openStream()));
+        String inputLine;
+        InputYahooData data = null;
+        while ((inputLine = in.readLine()) != null) {
+            data = new InputYahooData(inputLine, System.currentTimeMillis());
+        }
+        return data;
+    }
+
     private void serializeStock(InputYahooData yahooData) {
         Stock stock = null;
         boolean serializedFlag = false;
 
-        if (countNumberOfComma(yahooData.getYahooString()) != 7) {
+        if (stockManager.countNumberOfComma(yahooData.getYahooString()) != 7) {
 
             log.debug("Not processed because the number of comma <> 7");
             return;
 
         } else {
+            
             log.debug("build from stream");
-            stock = new Stock();
-            stock.parse(yahooData.getYahooString());
+            stock = stockManager.generateStock(yahooData.getYahooString());
             serializedFlag = true;
         }
 
         boolean toBeAddedStock = stockManager.addStockInDB(stock);
+        
         if (toBeAddedStock) {
             connector.insert_market_data(stock, yahooData.getTimestamp());
             log.info("Add " + stock);
         } else {
             log.debug("AddNot " + stock);
         }
-    }
-
-    private int countNumberOfComma(String inputStream) {
-        String[] st = inputStream.split(",");
-        return st.length - 1;
+        
     }
 
     public void setConnector(Connector connector) {

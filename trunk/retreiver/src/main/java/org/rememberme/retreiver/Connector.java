@@ -17,6 +17,8 @@ import org.apache.log4j.Logger;
 
 public class Connector {
 
+    private static final Logger log = Logger.getLogger(Connector.class);
+    
     private Connection conn = null;
     private String url;
     private String dbName;
@@ -27,7 +29,7 @@ public class Connector {
     private PreparedStatement insertStock;
     private PreparedStatement insertRawData;
     private Statement statement;
-    private static final Logger log = Logger.getLogger(Connector.class);
+    
 
 //    public Connector() {
 //    }

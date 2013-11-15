@@ -6,9 +6,9 @@ package org.rememberme.gui.component;
  */
 public class SimpleStockGUI {
 
-    private String name;
-    private String description;
-    private int id;
+    private final String name;
+    private final String description;
+    private final int id;
 
     public SimpleStockGUI(String name, String description, int id) {
         this.name = name;
