@@ -28,46 +28,6 @@ public class Stock implements Comparable<Stock> {
         this.lastTradeTime = lastTradeTime;
     }
 
-    public void parse(String str) {
-        String[] splitted = str.split(",");
-        name = splitted[0];
-        description = splitted[1];
-
-//		remove the " at the beginning and at the end of the name and the description fields.
-        name = name.replaceAll("\"", "");
-        description = description.replaceAll("\"", "");
-
-        if ("N/A".equalsIgnoreCase(splitted[2])) {
-            bbid = 0;
-        } else {
-            bbid = Double.parseDouble(splitted[2]);
-        }
-
-        if ("N/A".equalsIgnoreCase(splitted[3])) {
-            qbid = 0;
-        } else {
-            qbid = Integer.parseInt(splitted[3]);
-        }
-
-        if ("N/A".equalsIgnoreCase(splitted[4])) {
-            qask = 0;
-        } else {
-            qask = Integer.parseInt(splitted[4]);
-        }
-
-        if ("N/A".equalsIgnoreCase(splitted[5])) {
-            bask = 0;
-        } else {
-            bask = Double.parseDouble(splitted[5]);
-        }
-
-        this.lastTradeDate = splitted[6];
-        this.lastTradeTime = splitted[7];
-        lastTradeDate = lastTradeDate.replaceAll("\"", "");
-        lastTradeTime = lastTradeTime.replaceAll("\"", "");
-
-    }
-
     @Override
     public String toString() {
         return name + " " + description + " " + qbid + " " + bbid + " " + bask + " " + qask + " " + lastTradeDate + " " + lastTradeTime;
@@ -107,6 +67,42 @@ public class Stock implements Comparable<Stock> {
 
     public String getLastTradeTime() {
         return lastTradeTime;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setBbid(double bbid) {
+        this.bbid = bbid;
+    }
+
+    public void setQbid(long qbid) {
+        this.qbid = qbid;
+    }
+
+    public void setQask(long qask) {
+        this.qask = qask;
+    }
+
+    public void setBask(double bask) {
+        this.bask = bask;
+    }
+
+    public void setD(Date d) {
+        this.d = d;
+    }
+
+    public void setLastTradeDate(String lastTradeDate) {
+        this.lastTradeDate = lastTradeDate;
+    }
+
+    public void setLastTradeTime(String lastTradeTime) {
+        this.lastTradeTime = lastTradeTime;
     }
 
     @Override
