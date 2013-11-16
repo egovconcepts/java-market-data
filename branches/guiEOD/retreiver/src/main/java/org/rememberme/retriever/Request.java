@@ -1,4 +1,4 @@
-package org.rememberme.retreiver;
+package org.rememberme.retriever;
 
 /**
  *
