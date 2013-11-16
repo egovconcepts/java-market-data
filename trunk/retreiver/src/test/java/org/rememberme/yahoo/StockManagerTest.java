@@ -2,17 +2,17 @@ package org.rememberme.yahoo;
 
 import static org.junit.Assert.*;
 
-import org.rememberme.retreiver.Stock;
-import org.rememberme.retreiver.StockManager;
+import org.rememberme.retreiver.stock.YahooRTStock;
+import org.rememberme.retreiver.stockmanager.RTStockManager;
 
 public class StockManagerTest {
 
 //	@Test
 	public void testAddStock() {
-		StockManager manager = new StockManager();
+		RTStockManager manager = new RTStockManager();
 		assertEquals(0, manager.getPreviousStocks().size());
 		
-		Stock stock = manager.generateStock("\"AC.PA\",\"ACCOR\",26.955,517,800,26.975");
+		YahooRTStock stock = manager.generateStock("\"AC.PA\",\"ACCOR\",26.955,517,800,26.975");
 		boolean isNewStock = manager.addStockInDB(stock);
 		
 		assertEquals(1, manager.getPreviousStocks().size());

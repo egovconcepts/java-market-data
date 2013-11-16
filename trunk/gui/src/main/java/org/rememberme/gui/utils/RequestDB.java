@@ -20,7 +20,7 @@ public class RequestDB {
 
     public RequestDB(Connector connector) {
         this.connector = connector;
-        this.con = connector.getConn();
+        this.con = connector.getConnection();
     }
 
     public List<SimpleStockGUI> retreiveStockList() {

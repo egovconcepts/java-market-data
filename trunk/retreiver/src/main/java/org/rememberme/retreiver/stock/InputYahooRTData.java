@@ -1,15 +1,15 @@
-package org.rememberme.retreiver;
+package org.rememberme.retreiver.stock;
 
 /**
  *
  * @author remembermewy
  */
-public class InputYahooData {
+public class InputYahooRTData {
     
     private String yahooString;
     private long timestamp;
 
-    public InputYahooData(String yahooString, long timestamp) {
+    public InputYahooRTData(String yahooString, long timestamp) {
         this.yahooString = yahooString;
         this.timestamp = timestamp;
     }

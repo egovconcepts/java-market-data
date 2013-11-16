@@ -1,7 +1,6 @@
 package org.rememberme.gui;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.HeadlessException;
 import java.sql.SQLException;
 import javax.swing.JFrame;
@@ -36,7 +35,7 @@ public class Main extends JFrame {
         frame.setVisible(true);
     }
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
 
 //        String server = args[0];
 //        String port = args[1];

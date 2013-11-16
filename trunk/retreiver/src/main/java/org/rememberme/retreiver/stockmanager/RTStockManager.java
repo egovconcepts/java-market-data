@@ -1,28 +1,33 @@
-package org.rememberme.retreiver;
+package org.rememberme.retreiver.stockmanager;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import org.rememberme.retreiver.stock.YahooRTStock;
 
-public class StockManager {
+/**
+ * 
+ * @author remembermewhy
+ */
+public class RTStockManager {
 
-    private List<Stock> previousStocks;
+    private List<YahooRTStock> previousStocks;
 
-    public StockManager() {
+    public RTStockManager() {
         previousStocks = new ArrayList<>();
     }
 
     /*
      * @return true if the stock should be serialized.
      */
-    public synchronized boolean addStockInDB(Stock stock) {
+    public synchronized boolean addStockInDB(YahooRTStock stock) {
         boolean result = true;
         if (previousStocks.contains(stock)) {
             result = false;
         } else {
 
-            Stock previous = null;
-            for (Stock st : previousStocks) {
+            YahooRTStock previous = null;
+            for (YahooRTStock st : previousStocks) {
                 if (0 == compareStockByName.compare(stock, st)) {
                     previous = st;
                 }
@@ -38,15 +43,15 @@ public class StockManager {
         }
         return result;
     }
-    private Comparator<Stock> compareStockByName = new CompareStockByName();
+    private Comparator<YahooRTStock> compareStockByName = new CompareStockByName();
 
     public int countNumberOfComma(String inputStream) {
         String[] st = inputStream.split(",");
         return st.length - 1;
     }
 
-    public Stock generateStock(String yahooInput) {
-        Stock stock = new Stock();
+    public YahooRTStock generateStock(String yahooInput) {
+        YahooRTStock stock = new YahooRTStock();
         String[] splitted = yahooInput.split(",");
         stock.setName(splitted[0]);
         stock.setDescription(splitted[1]);
@@ -77,14 +82,14 @@ public class StockManager {
         return stock;
     }
 
-    private class CompareStockByName implements Comparator<Stock> {
+    private class CompareStockByName implements Comparator<YahooRTStock> {
 
-        public int compare(Stock o1, Stock o2) {
+        public int compare(YahooRTStock o1, YahooRTStock o2) {
             return o1.getName().compareTo(o2.getName());
         }
     }
 
-    public List<Stock> getPreviousStocks() {
+    public List<YahooRTStock> getPreviousStocks() {
         return previousStocks;
     }
 }
