@@ -1,8 +1,12 @@
-package org.rememberme.retreiver;
+package org.rememberme.retreiver.stock;
 
 import java.util.Date;
 
-public class Stock implements Comparable<Stock> {
+/**
+ * 
+ * @author remembermewhy
+ */
+public class YahooRTStock implements Comparable<YahooRTStock> {
 
     private String name;
     private String description;
@@ -14,10 +18,10 @@ public class Stock implements Comparable<Stock> {
     private String lastTradeDate;
     private String lastTradeTime;
 
-    public Stock() {
+    public YahooRTStock() {
     }
 
-    public Stock(String name, String description, double bbid, long qbid, long qask, double bask, String lastTradeDate, String lastTradeTime) {
+    public YahooRTStock(String name, String description, double bbid, long qbid, long qask, double bask, String lastTradeDate, String lastTradeTime) {
         this.name = name;
         this.description = description;
         this.bbid = bbid;
@@ -107,7 +111,7 @@ public class Stock implements Comparable<Stock> {
 
     @Override
     public boolean equals(Object o) {
-        Stock stock = (Stock) o;
+        YahooRTStock stock = (YahooRTStock) o;
 
         if (!name.equalsIgnoreCase(stock.name)) {
             return false;
@@ -136,7 +140,7 @@ public class Stock implements Comparable<Stock> {
         return true;
     }
 
-    public int compareTo(Stock o) {
+    public int compareTo(YahooRTStock o) {
 
         if (!name.equalsIgnoreCase(o.name)) {
             return name.compareTo(o.name);
