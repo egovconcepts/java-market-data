@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.rememberme.gui.component.SimpleStockGUI;
-import org.rememberme.retreiver.Connector;
+import org.rememberme.retriever.Connector;
 
 /**
  *

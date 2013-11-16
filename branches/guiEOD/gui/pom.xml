@@ -5,11 +5,11 @@
     <parent>
         <groupId>org.rememberme</groupId>
         <artifactId>yahoomd</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
     </parent>
 
     <artifactId>gui</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>gui</name>
@@ -65,8 +65,8 @@
         </dependency>
         <dependency>
             <groupId>org.rememberme</groupId>
-            <artifactId>retreiver</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <artifactId>retriever</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
     
     </dependencies>

@@ -9,7 +9,7 @@ import javax.swing.JTable;
 import org.apache.log4j.Logger;
 import org.rememberme.gui.component.SimpleStockGUI;
 import org.rememberme.gui.utils.RequestDB;
-import org.rememberme.retreiver.Connector;
+import org.rememberme.retriever.Connector;
 
 /**
  *

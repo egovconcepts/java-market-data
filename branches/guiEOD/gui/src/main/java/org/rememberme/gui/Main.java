@@ -5,7 +5,7 @@ import java.awt.HeadlessException;
 import java.sql.SQLException;
 import javax.swing.JFrame;
 import org.apache.log4j.Logger;
-import org.rememberme.retreiver.Connector;
+import org.rememberme.retriever.Connector;
 
 /**
  *
