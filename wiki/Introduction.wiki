@@ -36,3 +36,4 @@ So the goal would  use the http://eoddata.com/ market data. Intraday as well as 
 
 Integrate the application within the [https://netbeans.org/features/platform/ Netbeans RCP] platform.
 
+[http://www.osnews.com/story/19266/WTFs_m http://www.osnews.com/images/comics/wtfm.jpg]
