@@ -12,7 +12,7 @@
 
     <modules>
         <module>retreiver</module>
-        <module>gui</module>
+        <module>javafxGUI</module>
     </modules>
 
     <build>
