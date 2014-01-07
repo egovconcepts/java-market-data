@@ -1,4 +1,4 @@
-package org.rememberme.retreiver;
+package org.rememberme.retriever;
 
 /**
  *
@@ -10,36 +10,38 @@ public class Request {
         return Connector.PREFIX_EOD + "" + ticker;
     }
     
-    public static String INSERT_RT_DATA = "insert into YAHOO_MARKET_DATA (DATE,TIME,STOCK_NAME,STOCK_DES,BBID,BQTY,AQTY,BASK,LAST_TRADE_DATE,LAST_TRADE_TIME) "
-            + "values (?,?,?,?,?,?,?,?,?,?)";
+    public static String CLEAN_EOD = "DELETE FROM EOD";
     
     public static String INSERT_HISTORICAL_DATA ="insert into EOD(TICKER,DATE,OPENPRICE,HIGHPRICE,LOWPRICE,CLOSEPRICE,VOLUME,ADJ)"
             + "values(?,?,?,?,?,?,?,?)";
     
-    public static String ADD_STOCK = "INSERT INTO STOCK (NAME, YAHOO_NAME) VALUES"
-            + "('Accor Paris', 'AC.PA'),"
+    public static String ADD_GOOG_STOCK = "INSERT INTO STOCK (NAME, YAHOO_NAME) VALUES"
             + "('GOOGLE Inc.', 'GOOG')";
-
+    
+    public static String ADD_STOCK_DEF = "INSERT INTO STOCK (NAME, YAHOO_NAME) VALUES"
+            + "(?, ?)";
+    
     public static String GENERATE_STOCK_TABLE = "CREATE TABLE STOCK (\n"
             + "  ID INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),\n"
             + "  NAME varchar(100) NOT NULL,\n"
             + "  YAHOO_NAME varchar(50) NOT NULL,\n"
             + "  PRIMARY KEY (ID))";
 
-    public static String GENERATE_RT_MD_TABLE = "CREATE TABLE YAHOO_MARKET_DATA (\n"
-            + "  ID INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),\n"
-            + "  DATE date NOT NULL,\n"
-            + "  TIME time NOT NULL,\n"
-            + "  STOCK_NAME varchar(30) DEFAULT NULL,\n"
-            + "  STOCK_DES varchar(100) DEFAULT NULL,\n"
-            + "  BQTY int NOT NULL,\n"
-            + "  BBID double NOT NULL,\n"
-            + "  BASK double DEFAULT NULL,\n"
-            + "  AQTY int NOT NULL,\n"
-            + "  LAST_TRADE_DATE date DEFAULT NULL,\n"
-            + "  LAST_TRADE_TIME time DEFAULT NULL,\n"
-            + "  PRIMARY KEY (ID))";
-
+    public static String GENERATE_EOD_MD_TABLE = "CREATE TABLE EOD ("
+                + "  ID INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+                + "  TICKER VARCHAR(10) NOT NULL,"
+                + "  DATE DATE NOT NULL,"
+                + "  OPENPRICE DOUBLE,"
+                + "  HIGHPRICE DOUBLE,"
+                + "  LOWPRICE DOUBLE,"
+                + "  CLOSEPRICE DOUBLE,"
+                + "  VOLUME INT,"
+                + "  ADJ DOUBLE,"
+                + "  PRIMARY KEY (ID)"
+                + " )";
+    /**
+     * This is not actually all stock ;). just a big list of stock.
+     */
     public static String ALL_STOCK = "INSERT INTO STOCK (NAME, YAHOO_NAME) VALUES\n"
             + "	('Accor Paris', 'AC.PA'),\n"
             + "	('Air Liquide', '419919.PA'),\n"

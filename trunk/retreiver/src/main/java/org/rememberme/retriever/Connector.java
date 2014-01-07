@@ -1,4 +1,4 @@
-package org.rememberme.retreiver;
+package org.rememberme.retriever;
 
 import org.rememberme.retreiver.stock.YahooRTStock;
 import java.sql.Connection;
@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLSyntaxErrorException;
 import java.sql.Statement;
 import java.sql.Time;
 import java.text.DateFormat;
@@ -14,7 +15,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.rememberme.retreiver.stock.YahooEODStock;
 import org.rememberme.util.Utils;
@@ -33,7 +33,9 @@ public class Connector {
     private final String driver = "org.apache.derby.jdbc.EmbeddedDriver";
 
     private PreparedStatement insertRTStock;
-    public PreparedStatement insertEODtock;
+    private PreparedStatement insertEODtock;
+    private PreparedStatement insertStockDef;
+//    private PreparedStatement loadEODStock;
 
     private Statement statement;
 
@@ -43,8 +45,16 @@ public class Connector {
         connection = DriverManager.getConnection(url);
         log.info("Connected to the database");
         statement = connection.createStatement();
-//        insertRTStock = connection.prepareStatement(Request.INSERT_RT_DATA);
-//        insertEODtock = connection.prepareStatement(Request.INSERT_HISTORICAL_DATA);
+
+        try {
+            insertStockDef = connection.prepareStatement(Request.ADD_STOCK_DEF);
+        } catch (SQLSyntaxErrorException sqlsee) {
+            generateStockTable();
+            generateEODMarketDataTable();
+            insertStockDef = connection.prepareStatement(Request.ADD_STOCK_DEF);
+        }
+
+        insertEODtock = connection.prepareStatement(Request.INSERT_HISTORICAL_DATA);
     }
 
     /**
@@ -56,16 +66,31 @@ public class Connector {
         try {
             statement.execute(query);
         } catch (SQLException sqle) {
-            sqle.printStackTrace();
+            log.error("sql exception");
         }
     }
 
     /**
-     * Execute the ADD_STOCK query.
+     * Insert a random stock in the database.
+     *
+     * insert a new stock definition
+     *
+     * @param ticker
+     * @param def
+     * @throws java.sql.SQLException
      */
-    public final void addStock() {
+    public final void addStockDef(String ticker, String def) throws SQLException {
+        insertStockDef.setString(1, ticker);
+        insertStockDef.setString(2, def);
+        insertStockDef.execute();
+    }
+
+    /**
+     * Execute the ADD_GOOG_STOCK query.
+     */
+    public final void addGOOGStock() {
         try {
-            statement.execute(Request.ADD_STOCK);
+            statement.execute(Request.ADD_GOOG_STOCK);
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
@@ -79,53 +104,30 @@ public class Connector {
             statement.execute(Request.GENERATE_STOCK_TABLE);
         } catch (SQLException sqle) {
             log.error("Stock table already exist");
-//            sqle.printStackTrace();
         }
     }
 
     /**
-     * Create the market data table.
-     */
-    public final void generateRTMarketDataTable() {
-        try {
-            statement.execute(Request.GENERATE_RT_MD_TABLE);
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-        }
-    }
-
-    /**
-     * Create an EOD database.
+     * Create an EOD database. generateRTMarketDataTable
      *
-     * @param ticker
      */
-    public final void CREATE_EOD_DB() {
-
-        final String request = "CREATE TABLE EOD ("
-                + "  ID INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
-                + "  TICKER VARCHAR(10) NOT NULL,"
-                + "  DATE DATE NOT NULL,"
-                + "  OPENPRICE DOUBLE,"
-                + "  HIGHPRICE DOUBLE,"
-                + "  LOWPRICE DOUBLE,"
-                + "  CLOSEPRICE DOUBLE,"
-                + "  VOLUME INT,"
-                + "  ADJ DOUBLE,"
-                + "  PRIMARY KEY (ID)"
-                + " )";
+    public final void generateEODMarketDataTable() {
 
         try {
-            statement.execute(request);
+            statement.execute(Request.GENERATE_EOD_MD_TABLE);
         } catch (SQLException sqle) {
             System.out.println(sqle);
-//            sqle.printStackTrace();
         }
+
+    }
+
+    public final void cleanEODDB() {
         try {
-            insertEODtock = connection.prepareStatement(Request.INSERT_HISTORICAL_DATA);
+            log.info("clean EOD database");
+            statement.execute(Request.CLEAN_EOD);
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
-
     }
 
     /**
@@ -133,15 +135,19 @@ public class Connector {
      *
      * @return
      */
-    public List<String> loadStockDB() {
-        String request = "SELECT YAHOO_NAME FROM STOCK";
-        List<String> result = new ArrayList<>();
+    public List<List<String>> loadStockDB() {
+        String request = "SELECT * FROM STOCK";
+        List<List<String>> result = new ArrayList<>();
         try {
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(request);
             while (rs.next()) {
                 String ticker = rs.getString("YAHOO_NAME");
-                result.add(ticker);
+                String definition = rs.getString("NAME");
+                List<String> stockDef = new ArrayList<>();
+                stockDef.add(ticker);
+                stockDef.add(definition);
+                result.add(stockDef);
             }
         } catch (SQLException sqle) {
             return null;
@@ -149,10 +155,43 @@ public class Connector {
         return result;
     }
 
+    /**
+     *
+     * @param ticker
+     * @return
+     * @throws SQLException
+     */
+    public List<YahooEODStock> LOAD_HISTORICAL_STOCK(final String ticker) throws SQLException {
+        List<YahooEODStock> historicalStock = new ArrayList<>();
+
+        String request = "SELECT * FROM EOD WHERE TICKER LIKE '" + ticker+"'";
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery(request);
+
+        while (rs.next()) {
+            Date date = rs.getDate("Date");
+            double open = rs.getDouble("OPENPRICE");
+            double high = rs.getDouble("HIGHPRICE");
+            double low = rs.getDouble("LOWPRICE");
+            double close = rs.getDouble("CLOSEPRICE");
+            int volume = rs.getInt("VOLUME");
+            double adj = rs.getDouble("ADJ");
+
+            String dateStr = EODDateFormat.format(date);
+
+            YahooEODStock stock = new YahooEODStock(ticker, dateStr, open, high, low, close, volume, adj);
+            log.debug("load EOD : " + stock);
+            historicalStock.add(stock);
+        }
+
+        return historicalStock;
+    }
+
     private final DateFormat EODDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public void insertMarketData(YahooEODStock stock) {
         try {
+
             insertEODtock.setString(1, stock.getTicker());
 
             try {
