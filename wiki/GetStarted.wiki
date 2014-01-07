@@ -16,5 +16,3 @@
  * Use *_mvn install* 
  * Go to the javafxgui/target directory
  * java -jar * javafxGUI-1.0.2.jar *
-
-java -jar yahoo-x.x.x-SNAPSHOT-jar-with-dependencies.jar
