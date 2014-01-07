@@ -17,15 +17,21 @@ public class EODStockManager {
         stocks = new ArrayList<>();
     }
 
-    public void addStock(YahooEODStock stock){
+    public void addStock(YahooEODStock stock) {
         stocks.add(stock);
     }
-    
-    public void addStock(String yahooInput){
+
+    public void addStock(String yahooInput) {
         YahooEODStock stock = generateStock(yahooInput);
         stocks.add(stock);
     }
-    
+
+    /**
+     * Generate a Stock from the network String.
+     *
+     * @param yahooInput
+     * @return
+     */
     public YahooEODStock generateStock(String yahooInput) {
         String[] splitted = yahooInput.split(",");
 
@@ -37,8 +43,8 @@ public class EODStockManager {
         int volume = Integer.valueOf(splitted[5]);
         double adj = Double.valueOf(splitted[6]);
 
-        YahooEODStock stock = new YahooEODStock(ticker,date, open, high, low, close, volume, adj);
-        
+        YahooEODStock stock = new YahooEODStock(ticker, date, open, high, low, close, volume, adj);
+
         return stock;
     }
 
