@@ -1,12 +1,12 @@
 package org.rememberme.javafxgui;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -28,6 +28,7 @@ import javafx.stage.Stage;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.rememberme.javafxgui.model.StockModel;
+import org.rememberme.javafxgui.services.ProcessEODService;
 import org.rememberme.retreiver.stock.YahooEODStock;
 import org.rememberme.retriever.Connector;
 import org.rememberme.retriever.DataRetriever;
@@ -47,6 +48,8 @@ public class HistoricalDataGUI extends Application {
     Connector connector;
     DataRetriever dr;
 
+    final ProcessEODService processEODService = new ProcessEODService();
+
     public HistoricalDataGUI() {
     }
 
@@ -59,10 +62,11 @@ public class HistoricalDataGUI extends Application {
         dr.setConnector(connector);
         dr.init();
 
-        
+        processEODService.setRetriever(dr);
+
         connector.generateStockTable();
 //        connector.executeQuery(Request.ADD_GOOG_STOCK);
-        connector.executeQuery(Request.ALL_STOCK);
+//        connector.executeQuery(Request.ALL_STOCK);
         connector.generateEODMarketDataTable();
 
         // --- Menu File
@@ -83,15 +87,34 @@ public class HistoricalDataGUI extends Application {
         load.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
-                try {
-                    dr.processEODStockData();
-                } catch (IOException ex) {
-                    Log.error(ex);
+                if (processEODService.progressProperty().get() == -1) {
+                    processEODService.start();
+                } else {
+                    Log.info("Service already started " + processEODService.progressProperty().get());
                 }
             }
         });
 
         menuFile.getItems().addAll(load);
+        
+        MenuItem stockTable = new MenuItem("Generate Stock Table");
+        stockTable.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                Task task = new Task<Void>() {
+
+                    @Override
+                    protected Void call() throws Exception {
+                        connector.executeQuery(Request.ALL_STOCK);
+                        return null;
+                    }
+                };
+                new Thread(task).start();
+            }
+        });
+
+        menuFile.getItems().addAll(stockTable);
+        
         menuBar.getMenus().addAll(menuFile);
 
         List<List<String>> stockList = connector.loadStockDB();
@@ -102,7 +125,7 @@ public class HistoricalDataGUI extends Application {
 
 //        Group root = new Group();
         final BorderPane borderPane = new BorderPane();
-        Scene scene = new Scene(borderPane,800,600);
+        Scene scene = new Scene(borderPane, 800, 600);
         stage.setTitle("Stock List");
 
         final Label label = new Label("Stock View");
@@ -140,23 +163,16 @@ public class HistoricalDataGUI extends Application {
 
         borderPane.setTop(menuBar);
         borderPane.setLeft(leftborder);
+        
 //        borderPane.setCenter(centerPane);
-        List<YahooEODStock> eod = connector.LOAD_HISTORICAL_STOCK("GOOG");
-        Node node = SingleTickerNodeGen.GenerateSingleTickerNode("GOOG", eod);
+        List<YahooEODStock> eod = connector.LOAD_HISTORICAL_STOCK("YHOO");
+        Node node = SingleTickerNodeGen.GenerateSingleTickerNode("YHOO", eod);
         final TabPane pane = new TabPane();
-        Tab tab = new Tab("GOOG");
+        Tab tab = new Tab("YHOO");
         tab.setContent(node);
         pane.getTabs().add(tab);
         borderPane.setCenter(pane);
-//        centerPane.sets
-//        centerPane.setCenter(node);
-//        borderPane.setCenter(node);
-
-//        ((Group) scene.getRoot()).getChildren().add(node);
-
-//        root.set`
         
-//        Scene scene2 = new Scene(node,800,600);
         stage.setScene(scene);
         stage.show();
 
