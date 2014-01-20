@@ -1,6 +1,5 @@
 package org.rememberme.retriever;
 
-import org.rememberme.retreiver.stock.YahooRTStock;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -9,15 +8,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLSyntaxErrorException;
 import java.sql.Statement;
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
+import org.rememberme.retreiver.stock.SingleStockDef;
 import org.rememberme.retreiver.stock.YahooEODStock;
-import org.rememberme.util.Utils;
 
 /**
  *
@@ -135,19 +133,17 @@ public class Connector {
      *
      * @return
      */
-    public List<List<String>> loadStockDB() {
+    public List<SingleStockDef> loadStockDB() {
         String request = "SELECT * FROM STOCK";
-        List<List<String>> result = new ArrayList<>();
+        List<SingleStockDef> result = new ArrayList<>();
         try {
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(request);
             while (rs.next()) {
-                String ticker = rs.getString("YAHOO_NAME");
-                String definition = rs.getString("NAME");
-                List<String> stockDef = new ArrayList<>();
-                stockDef.add(ticker);
-                stockDef.add(definition);
-                result.add(stockDef);
+                String ticker = rs.getString("TICKER");
+                String definition = rs.getString("DESCRIPTION");
+                SingleStockDef ssd = new SingleStockDef(ticker, definition);
+                result.add(ssd);
             }
         } catch (SQLException sqle) {
             return null;
@@ -218,39 +214,6 @@ public class Connector {
     private final DateFormat lastTradeDateFormat = new SimpleDateFormat("MM/dd/yyyy");
     private final DateFormat lastTradeTimeFormat = new SimpleDateFormat("HH:mm");
 
-    /**
-     *
-     * @param stock
-     * @param timeStamp
-     */
-    public void insert_market_data(YahooRTStock stock, long timeStamp) {
-        java.util.Date d = new java.util.Date(timeStamp);
-        try {
-            insertRTStock.setDate(1, new Date(d.getTime()));
-            insertRTStock.setTime(2, new Time(d.getTime()));
-            insertRTStock.setString(3, stock.getName());
-            insertRTStock.setString(4, stock.getDescription());
-            insertRTStock.setDouble(5, stock.getBbid());
-            insertRTStock.setLong(6, stock.getQbid());
-            insertRTStock.setLong(7, stock.getQask());
-            insertRTStock.setDouble(8, stock.getBask());
-
-            try {
-                insertRTStock.setDate(9, new java.sql.Date(lastTradeDateFormat.parse(stock.getLastTradeDate()).getTime()));
-            } catch (ParseException ex) {
-                insertRTStock.setDate(9, null);
-            }
-
-            try {
-                insertRTStock.setTime(10, new java.sql.Time(lastTradeTimeFormat.parse(Utils.removeAmPm(stock.getLastTradeTime())).getTime()));
-            } catch (ParseException ex) {
-                insertRTStock.setDate(10, null);
-            }
-            insertRTStock.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public Connection getConnection() {
         return connection;

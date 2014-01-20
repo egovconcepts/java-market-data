@@ -15,16 +15,16 @@ public class Request {
     public static String INSERT_HISTORICAL_DATA ="insert into EOD(TICKER,DATE,OPENPRICE,HIGHPRICE,LOWPRICE,CLOSEPRICE,VOLUME,ADJ)"
             + "values(?,?,?,?,?,?,?,?)";
     
-    public static String ADD_GOOG_STOCK = "INSERT INTO STOCK (NAME, YAHOO_NAME) VALUES"
-            + "('GOOGLE Inc.', 'GOOG')";
+    public static String ADD_GOOG_STOCK = "INSERT INTO STOCK (TICKER, DESCRIPTION) VALUES"
+            + "('GOOG','GOOGLE Inc.' )";
     
-    public static String ADD_STOCK_DEF = "INSERT INTO STOCK (NAME, YAHOO_NAME) VALUES"
+    public static String ADD_STOCK_DEF = "INSERT INTO STOCK (TICKER, DESCRIPTION) VALUES"
             + "(?, ?)";
     
     public static String GENERATE_STOCK_TABLE = "CREATE TABLE STOCK (\n"
             + "  ID INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),\n"
-            + "  NAME varchar(100) NOT NULL,\n"
-            + "  YAHOO_NAME varchar(50) NOT NULL,\n"
+            + "  TICKER varchar(100) NOT NULL,\n"
+            + "  DESCRIPTION varchar(50) NOT NULL,\n"
             + "  PRIMARY KEY (ID))";
 
     public static String GENERATE_EOD_MD_TABLE = "CREATE TABLE EOD ("
