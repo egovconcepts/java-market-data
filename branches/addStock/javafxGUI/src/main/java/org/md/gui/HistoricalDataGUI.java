@@ -1,4 +1,4 @@
-package org.rememberme.javafxgui;
+package org.md.gui;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -29,14 +29,14 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
-import org.rememberme.javafxgui.model.StockModel;
-import org.rememberme.javafxgui.services.ProcessEODService;
-import org.rememberme.javafxgui.services.ProcessEODSingleStockService;
-import org.rememberme.retreiver.stock.SingleStockDef;
-import org.rememberme.retreiver.stock.YahooEODStock;
-import org.rememberme.retriever.Connector;
-import org.rememberme.retriever.DataRetriever;
-import org.rememberme.retriever.Request;
+import org.md.gui.model.StockModel;
+import org.md.gui.services.ProcessEODService;
+import org.md.gui.services.ProcessEODSingleStockService;
+import org.md.retreiver.stock.SingleStockDef;
+import org.md.retreiver.stock.YahooEODStock;
+import org.md.retriever.Connector;
+import org.md.retriever.DataRetriever;
+import org.md.retriever.Request;
 
 /**
  *

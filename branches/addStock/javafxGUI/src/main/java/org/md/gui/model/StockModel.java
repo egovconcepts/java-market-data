@@ -1,4 +1,4 @@
-package org.rememberme.javafxgui.model;
+package org.md.gui.model;
 
 import javafx.beans.property.SimpleStringProperty;
 

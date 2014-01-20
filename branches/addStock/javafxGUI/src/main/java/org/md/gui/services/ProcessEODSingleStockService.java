@@ -1,12 +1,12 @@
-package org.rememberme.javafxgui.services;
+package org.md.gui.services;
 
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import org.rememberme.retreiver.stock.SingleStockDef;
-import org.rememberme.retriever.DataRetriever;
+import org.md.retreiver.stock.SingleStockDef;
+import org.md.retriever.DataRetriever;
 
 /**
  *

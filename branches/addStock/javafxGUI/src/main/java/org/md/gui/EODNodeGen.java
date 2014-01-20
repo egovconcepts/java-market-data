@@ -1,4 +1,4 @@
-package org.rememberme.javafxgui;
+package org.md.gui;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -14,8 +14,8 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import org.rememberme.retreiver.stock.YahooEODStock;
-import org.rememberme.util.Time;
+import org.md.retreiver.stock.YahooEODStock;
+import org.md.util.Time;
 
 /**
  *

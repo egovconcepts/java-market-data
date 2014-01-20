@@ -1,4 +1,4 @@
-package org.rememberme.javafxgui;
+package org.md.gui;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -10,8 +10,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.rememberme.retreiver.stock.SingleStockDef;
-import org.rememberme.retriever.DataRetriever;
+import org.md.retreiver.stock.SingleStockDef;
+import org.md.retriever.DataRetriever;
 
 /**
  *

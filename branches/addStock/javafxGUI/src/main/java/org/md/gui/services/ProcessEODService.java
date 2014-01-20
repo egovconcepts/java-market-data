@@ -1,9 +1,9 @@
-package org.rememberme.javafxgui.services;
+package org.md.gui.services;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import org.rememberme.retriever.DataRetriever;
+import org.md.retriever.DataRetriever;
 
 /**
  *
