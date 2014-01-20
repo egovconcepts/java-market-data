@@ -7,12 +7,12 @@
     <version>1.0.2</version>
     <packaging>jar</packaging>
 
-    <name>javafxGUI</name>
+    <name>marketdata</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!--<mainClass>org.rememberme.javafxgui.MainApp</mainClass>-->
-        <mainClass>org.rememberme.javafxgui.HistoricalDataGUI</mainClass>
+        <mainClass>org.md.gui.HistoricalDataGUI</mainClass>
     </properties>
 
     <organization>
@@ -104,7 +104,12 @@
             <version>2</version>
             <systemPath>${java.home}/lib/jfxrt.jar</systemPath>
             <scope>system</scope>
-        </dependency>        
+        </dependency>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>10.10.1.1</version>
+        </dependency>       
     </dependencies>
 
 </project>

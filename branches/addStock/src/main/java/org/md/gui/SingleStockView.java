@@ -41,7 +41,6 @@ public class SingleStockView extends Application {
 
         final SingleStockDef def = new SingleStockDef();
         
-//        definitionText.setVisible(false);
         layout.setHgap(10);
         layout.setVgap(30);
         layout.setPadding(new Insets(15, 12, 15, 12));
