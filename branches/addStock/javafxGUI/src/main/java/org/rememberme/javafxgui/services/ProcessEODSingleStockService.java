@@ -1,29 +1,39 @@
 package org.rememberme.javafxgui.services;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import org.rememberme.retreiver.stock.SingleStockDef;
 import org.rememberme.retriever.DataRetriever;
 
 /**
  *
  * @author remembermewhy
  */
-public class ProcessEODService extends Service{
+public class ProcessEODSingleStockService extends Service {
 
     private final SimpleObjectProperty<DataRetriever> retriever = new SimpleObjectProperty<>();
+    private SingleStockDef singleStockDef;
 
     public void setRetriever(DataRetriever dr) {
         this.retriever.set(dr);
     }
-    
+
+    public void setSingleStockDef(SingleStockDef singleStockDef) {
+        this.singleStockDef = singleStockDef;
+    }
+
     @Override
     protected Task createTask() {
         return new Task() {
 
             @Override
             protected Object call() throws Exception {
-                retriever.get().processEODStockData();
+                List<SingleStockDef> ssds = new ArrayList<>();
+                ssds.add(singleStockDef);
+                retriever.get().processEODStockData(ssds);
                 return null;
             }
         };

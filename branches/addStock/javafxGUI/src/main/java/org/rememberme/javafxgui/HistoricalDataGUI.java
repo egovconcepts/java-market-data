@@ -1,7 +1,9 @@
 package org.rememberme.javafxgui;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -12,10 +14,11 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -23,19 +26,19 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.rememberme.javafxgui.model.StockModel;
 import org.rememberme.javafxgui.services.ProcessEODService;
+import org.rememberme.javafxgui.services.ProcessEODSingleStockService;
+import org.rememberme.retreiver.stock.SingleStockDef;
 import org.rememberme.retreiver.stock.YahooEODStock;
 import org.rememberme.retriever.Connector;
 import org.rememberme.retriever.DataRetriever;
 import org.rememberme.retriever.Request;
 
 /**
- *
  *
  * @author remembermewhy
  */
@@ -44,7 +47,7 @@ public class HistoricalDataGUI extends Application {
     private static final Logger Log = Logger.getLogger(HistoricalDataGUI.class);
 
     private final TableView table = new TableView();
-    final ObservableList<StockModel> data = FXCollections.observableArrayList();
+    private final ObservableList<StockModel> data = FXCollections.observableArrayList();
     Connector connector;
     DataRetriever dr;
 
@@ -65,8 +68,6 @@ public class HistoricalDataGUI extends Application {
         processEODService.setRetriever(dr);
 
         connector.generateStockTable();
-//        connector.executeQuery(Request.ADD_GOOG_STOCK);
-//        connector.executeQuery(Request.ALL_STOCK);
         connector.generateEODMarketDataTable();
 
         // --- Menu File
@@ -96,7 +97,7 @@ public class HistoricalDataGUI extends Application {
         });
 
         menuFile.getItems().addAll(load);
-        
+
         MenuItem stockTable = new MenuItem("Generate Stock Table");
         stockTable.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -112,28 +113,28 @@ public class HistoricalDataGUI extends Application {
                 new Thread(task).start();
             }
         });
-
         menuFile.getItems().addAll(stockTable);
-        
+
+        MenuItem newStock = new MenuItem("New Stock");
+        newStock.setOnAction(new LookupStockHandler(this));
+        menuFile.getItems().addAll(newStock);
+
         menuBar.getMenus().addAll(menuFile);
 
-        List<List<String>> stockList = connector.loadStockDB();
+        List<SingleStockDef> stockList = connector.loadStockDB();
 
-        for (List<String> stockDef : stockList) {
-            data.add(new StockModel(new SimpleStringProperty(stockDef.get(0)), new SimpleStringProperty(stockDef.get(1))));
+        for (SingleStockDef stockDef : stockList) {
+            data.add(new StockModel(new SimpleStringProperty(stockDef.getTicker()), new SimpleStringProperty(stockDef.getDefinition())));
         }
 
-//        Group root = new Group();
         final BorderPane borderPane = new BorderPane();
         Scene scene = new Scene(borderPane, 800, 600);
         stage.setTitle("Stock List");
 
-        final Label label = new Label("Stock View");
-        label.setMaxWidth(Double.MAX_VALUE);
-        label.setFont(new Font("Arial", 20));
-
         final Button buttonGraph = new Button("Show Graph");
         buttonGraph.setMaxWidth(Double.MAX_VALUE);
+
+        table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         TableColumn tickerColumn = new TableColumn("Ticker");
         table.getColumns().addAll(tickerColumn);
@@ -153,7 +154,6 @@ public class HistoricalDataGUI extends Application {
 
         BorderPane leftborder = new BorderPane();
 
-        leftborder.setTop(label);
         leftborder.setCenter(table);
         leftborder.setBottom(buttonGraph);
 
@@ -163,16 +163,10 @@ public class HistoricalDataGUI extends Application {
 
         borderPane.setTop(menuBar);
         borderPane.setLeft(leftborder);
-        
-//        borderPane.setCenter(centerPane);
-        List<YahooEODStock> eod = connector.LOAD_HISTORICAL_STOCK("YHOO");
-        Node node = SingleTickerNodeGen.GenerateSingleTickerNode("YHOO", eod);
+
         final TabPane pane = new TabPane();
-        Tab tab = new Tab("YHOO");
-        tab.setContent(node);
-        pane.getTabs().add(tab);
         borderPane.setCenter(pane);
-        
+
         stage.setScene(scene);
         stage.show();
 
@@ -182,7 +176,7 @@ public class HistoricalDataGUI extends Application {
             public void handle(MouseEvent t) {
                 StockModel stockModel = (StockModel) table.getSelectionModel().getSelectedItem();
                 if (stockModel != null) {
-                    System.out.println(stockModel.getTicker() + " " + stockModel.getDefinition());
+                    Log.info(stockModel.getTicker() + " " + stockModel.getDefinition());
                 }
             }
         });
@@ -191,24 +185,76 @@ public class HistoricalDataGUI extends Application {
 
             @Override
             public void handle(ActionEvent t) {
-                StockModel stockModel = (StockModel) table.getSelectionModel().getSelectedItem();
-                if (stockModel != null) {
-                    String ticker = stockModel.getTicker();
-                    Log.info("Load graph for " + ticker + " " + stockModel.getDefinition());
+                List<StockModel> stockModels = (List<StockModel>) table.getSelectionModel().getSelectedItems();
+                if (stockModels != null && stockModels.size() > 0) {
+                    Log.info(" --------------------------------------------- ");
+                    for (StockModel model : stockModels) {
+                        Log.info("Load graph for " + model.getTicker() + " " + model.getDefinition());
+                    }
+                    Log.info(" --------------------------------------------- ");
+
                     try {
-                        List<YahooEODStock> eod = connector.LOAD_HISTORICAL_STOCK(ticker);
-                        Node node = SingleTickerNodeGen.GenerateSingleTickerNode(ticker, eod);
-                        Tab tab = new Tab(ticker);
+                        List<List<YahooEODStock>> eods = new ArrayList<>();
+                        for (StockModel model : stockModels) {
+                            List<YahooEODStock> eod = connector.LOAD_HISTORICAL_STOCK(model.getTicker());
+                            eods.add(eod);
+                        }
+                        
+                        
+                        Node node = EODNodeGen.GenerateTickerNode(eods);
+//                        Node node = EODNodeGen.GenerateSingleTickerNode(null, null)
+                        String tickers = "";
+                        for(StockModel model: stockModels){
+                            tickers = tickers + " " + model.getTicker();
+                        }
+                        Tab tab = new Tab(tickers);
                         tab.setContent(node);
                         pane.getTabs().add(tab);
-//                        borderPane.setCenter(node);
+                        SingleSelectionModel<Tab> model = pane.getSelectionModel();
+                        model.select(tab);
                     } catch (SQLException sqle) {
-                        Log.error("Error loading stock " + stockModel.getTicker(), sqle);
+                        Log.error("Error loading stocks ");
                     }
 
                 }
             }
         });
+    }
+
+    public void addStock(SingleStockDef def) {
+        ProcessEODSingleStockService service = new ProcessEODSingleStockService();
+        service.setRetriever(dr);
+        service.setSingleStockDef(def);
+
+        try {
+            connector.addStockDef(def.getTicker(), def.getDefinition());
+            data.add(new StockModel(def.getTicker(), def.getDefinition()));
+            service.start();
+        } catch (SQLException ex) {
+            Log.error(ex);
+        }
+
+    }
+
+    static class LookupStockHandler implements EventHandler<ActionEvent> {
+
+        HistoricalDataGUI historicalDataGUI;
+
+        public LookupStockHandler(HistoricalDataGUI historicalDataGUI) {
+            this.historicalDataGUI = historicalDataGUI;
+        }
+
+        @Override
+        public void handle(ActionEvent t) {
+            try {
+                SingleStockView singleStockView = new SingleStockView(historicalDataGUI);
+                singleStockView.setDataRetriever(historicalDataGUI.dr);
+                singleStockView.start(new Stage());
+            } catch (Exception ex) {
+                java.util.logging.Logger.getLogger(HistoricalDataGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
     }
 
     /**

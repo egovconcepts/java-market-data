@@ -15,6 +15,11 @@ public class StockModel {
         this.ticker = ticker;
         this.definition = def;
     }
+    
+    public StockModel(String ticker, String def) {
+        this.ticker = new SimpleStringProperty(ticker);
+        this.definition = new SimpleStringProperty(def);
+    }
 
     public String getTicker(){
         return ticker.get();
