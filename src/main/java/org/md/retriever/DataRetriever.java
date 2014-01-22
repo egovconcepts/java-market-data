@@ -10,10 +10,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.md.retreiver.stock.InputYahooEODHistorical;
-import org.md.retreiver.stock.SingleStockDef;
-import org.md.retreiver.stock.YahooEODStock;
-import org.md.retreiver.stockmanager.EODStockManager;
+import org.md.retriever.stock.InputYahooEODHistorical;
+import org.md.retriever.stock.SingleStockDef;
+import org.md.retriever.stock.YahooEODStock;
+import org.md.retriever.stockmanager.EODStockManager;
 
 /**
  * Retrieve Stock Information from the Yahoo Finance WebSite.
@@ -213,11 +213,7 @@ public class DataRetriever {
         dr.init();
         connector.generateStockTable();
         connector.generateEODMarketDataTable();
-
-//        connector.addGOOGStock();
         connector.executeQuery(Request.ALL_STOCK);
-//        dr.processRTStockData();
-//        dr.processEODStockData();
     }
 
 }
