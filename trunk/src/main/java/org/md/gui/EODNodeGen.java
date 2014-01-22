@@ -14,7 +14,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import org.md.retreiver.stock.YahooEODStock;
+import org.md.retriever.stock.YahooEODStock;
 import org.md.util.Time;
 
 /**

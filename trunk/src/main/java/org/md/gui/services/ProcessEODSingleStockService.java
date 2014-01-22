@@ -5,7 +5,7 @@ import java.util.List;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import org.md.retreiver.stock.SingleStockDef;
+import org.md.retriever.stock.SingleStockDef;
 import org.md.retriever.DataRetriever;
 
 /**

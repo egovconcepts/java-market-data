@@ -14,8 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.md.retreiver.stock.SingleStockDef;
-import org.md.retreiver.stock.YahooEODStock;
+import org.md.retriever.stock.SingleStockDef;
+import org.md.retriever.stock.YahooEODStock;
 
 /**
  *

@@ -10,7 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.md.retreiver.stock.SingleStockDef;
+import org.md.retriever.stock.SingleStockDef;
 import org.md.retriever.DataRetriever;
 
 /**
