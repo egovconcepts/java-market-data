@@ -19,4 +19,4 @@
 
 == In NetBeans == 
 
- * Add -Xbootclasspath/a:'${env.JAVA_HOME}/jre/lib/jfxrt.jar'  
+ * Add *exec.classpathScope=compile* to the "Run Project" Action of the used Maven profile in NetBeans
