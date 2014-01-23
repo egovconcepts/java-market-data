@@ -73,47 +73,6 @@ public class HistoricalDataGUI extends Application {
         // --- Menu File
         MenuBar menuBar = new MenuBar();
         Menu menuFile = new Menu("File");
-        MenuItem add = new MenuItem("Clean EOD DB");
-
-        add.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                connector.cleanEODDB();
-            }
-        });
-
-        menuFile.getItems().addAll(add);
-        MenuItem load = new MenuItem("Load EOD DB");
-
-        load.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                if (processEODService.progressProperty().get() == -1) {
-                    processEODService.start();
-                } else {
-                    Log.info("Service already started " + processEODService.progressProperty().get());
-                }
-            }
-        });
-
-        menuFile.getItems().addAll(load);
-
-        MenuItem stockTable = new MenuItem("Generate Stock Table");
-        stockTable.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                Task task = new Task<Void>() {
-
-                    @Override
-                    protected Void call() throws Exception {
-                        connector.executeQuery(Request.ALL_STOCK);
-                        return null;
-                    }
-                };
-                new Thread(task).start();
-            }
-        });
-        menuFile.getItems().addAll(stockTable);
 
         MenuItem newStock = new MenuItem("New Stock");
         newStock.setOnAction(new LookupStockHandler(this));
@@ -199,12 +158,16 @@ public class HistoricalDataGUI extends Application {
                             List<YahooEODStock> eod = connector.LOAD_HISTORICAL_STOCK(model.getTicker());
                             eods.add(eod);
                         }
-                        
-                        
-                        Node node = EODNodeGen.GenerateTickerNode(eods);
-//                        Node node = EODNodeGen.GenerateSingleTickerNode(null, null)
+
+                        Node node = null;
+
+                        if (eods.size() == 1) {
+                            node = EODNodeGen.GenerateSingleTickerNode(eods.get(0));
+                        } else {
+                            node = EODNodeGen.GenerateTickerNode(eods);
+                        }
                         String tickers = "";
-                        for(StockModel model: stockModels){
+                        for (StockModel model : stockModels) {
                             tickers = tickers + " " + model.getTicker();
                         }
                         Tab tab = new Tab(tickers);
