@@ -13,10 +13,10 @@
 == Steps ==
 
 {{{
-user@localhost:~/svn checkout https://java-market-data.googlecode.com/svn/trunk user@localhost:~/java-market-data
-user@localhost:~/mvn package
-user@localhost:~/cd target directory
-user@localhost:~/java -jar *eod.X.X.X*
+user@localhost:~/ svn checkout https://java-market-data.googlecode.com/svn/trunk user@localhost:~/ java-market-data
+user@localhost:~/ mvn package
+user@localhost:~/ cd target directory
+user@localhost:~/ java -jar eod.X.X.X
 }}}
 
 == In NetBeans == 
