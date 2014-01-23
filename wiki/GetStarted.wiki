@@ -15,7 +15,7 @@
  * Download the code from the source page.
  * Use *_mvn install* 
  * Go to the javafxgui/target directory
- * java -jar * javafxGUI-1.0.2.jar *
+ * java -jar *javafxGUI-1.0.2.jar*
 
 == In NetBeans == 
 
