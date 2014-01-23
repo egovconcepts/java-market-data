@@ -8,7 +8,6 @@ import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -36,7 +35,6 @@ import org.md.retriever.stock.SingleStockDef;
 import org.md.retriever.stock.YahooEODStock;
 import org.md.retriever.Connector;
 import org.md.retriever.DataRetriever;
-import org.md.retriever.Request;
 
 /**
  *
