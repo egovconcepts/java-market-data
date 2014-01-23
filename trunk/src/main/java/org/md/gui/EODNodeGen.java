@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.scene.Node;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.md.retriever.stock.YahooEODStock;
 import org.md.util.Time;
 
@@ -22,6 +22,8 @@ import org.md.util.Time;
  * @author remembermewhy
  */
 public class EODNodeGen {
+
+    private static final Logger log = Logger.getLogger(EODNodeGen.class);
 
     private static final DateFormat EODDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -99,6 +101,7 @@ public class EODNodeGen {
         }
 
         for (YahooEODStock yeods : tmp) {
+            log.debug(yeods);
             seriesClose.getData().add(new XYChart.Data(yeods.getDate(), yeods.getClose()));
         }
 
@@ -150,7 +153,8 @@ public class EODNodeGen {
             minDate = firstDate(shortList);
             dateList = new Time().listOfDate(minDate);
         } catch (ParseException ex) {
-            Logger.getLogger(EODNodeGen.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
+//            Logger.getLogger(EODNodeGen.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         List<List<YahooEODStock>> unifiedEOD = new ArrayList<>();
