@@ -12,10 +12,17 @@
 
 == Steps ==
 
- * Download the code from the source page.
- * Use *_mvn install* 
- * Go to the javafxgui/target directory
- * java -jar *javafxGUI-1.0.2.jar*
+{{{
+svn checkout https://java-market-data.googlecode.com/svn/trunk java-market-data
+*mvn package*
+cd target directory
+java -jar *eod.X.X.X*
+}}}
+
+ * svn checkout https://java-market-data.googlecode.com/svn/trunk java-market-data
+ * *mvn package* 
+ * cd target directory
+ * java -jar *eod-X.X.X.jar*
 
 == In NetBeans == 
 
