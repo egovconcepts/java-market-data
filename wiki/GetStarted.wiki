@@ -6,7 +6,7 @@
 
 == Tools ==
 
- * Java *jdk*
+ * Latest *JDK*
  * [http://maven.apache.org/ Maven]
  * [http://docs.oracle.com/javafx/ JavaFX]
 
