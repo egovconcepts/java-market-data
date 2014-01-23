@@ -19,6 +19,6 @@ user@localhost:~/ cd target directory
 user@localhost:~/ java -jar eod.X.X.X
 }}}
 
-== In NetBeans == 
+== In NetBeans. == 
 
- * Add *exec.classpathScope=compile* to the "Run Project" Action of the used Maven profile in NetBeans
+ * Add *exec.classpathScope=compile* to the "Run Project" Action of the used Maven profile in NetBeans.
