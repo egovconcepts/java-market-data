@@ -24,16 +24,16 @@ import org.md.retriever.stock.YahooEODStock;
 public class Connector {
 
     private static final Logger log = Logger.getLogger(Connector.class);
-    public static final String PREFIX_EOD = "EOD_";
+    
+    // @TODO create a table by stock for EOD market data. Currently there is only one EOD table that contains every stock.
+    public static final String PREFIX_EOD = "EOD_"; 
 
     private Connection connection = null;
     private final String url = "jdbc:derby:YAHOO;create=true";
     private final String driver = "org.apache.derby.jdbc.EmbeddedDriver";
 
-    private PreparedStatement insertRTStock;
     private PreparedStatement insertEODtock;
     private PreparedStatement insertStockDef;
-//    private PreparedStatement loadEODStock;
 
     private Statement statement;
 
@@ -84,17 +84,6 @@ public class Connector {
     }
 
     /**
-     * Execute the ADD_GOOG_STOCK query.
-     */
-    public final void addGOOGStock() {
-        try {
-            statement.execute(Request.ADD_GOOG_STOCK);
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-        }
-    }
-
-    /**
      * Create the stock table.
      */
     public final void generateStockTable() {
@@ -106,7 +95,7 @@ public class Connector {
     }
 
     /**
-     * Create an EOD database. generateRTMarketDataTable
+     * Create the EOD database.
      *
      */
     public final void generateEODMarketDataTable() {
@@ -119,21 +108,12 @@ public class Connector {
 
     }
 
-    public final void cleanEODDB() {
-        try {
-            log.info("clean EOD database");
-            statement.execute(Request.CLEAN_EOD);
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-        }
-    }
-
     /**
-     * Load Stocks from the database.
+     * Load Stock Defs from the database.
      *
-     * @return
-     */
-    public List<SingleStockDef> loadStockDB() {
+     * @return the list of all the stock included into the database.
+     */ 
+    public List<SingleStockDef> loadStockDefDB() {
         String request = "SELECT * FROM STOCK";
         List<SingleStockDef> result = new ArrayList<>();
         try {
@@ -157,7 +137,7 @@ public class Connector {
      * @return
      * @throws SQLException
      */
-    public List<YahooEODStock> LOAD_HISTORICAL_STOCK(final String ticker) throws SQLException {
+    public List<YahooEODStock> loadEOD(final String ticker) throws SQLException {
         List<YahooEODStock> historicalStock = new ArrayList<>();
 
         String request = "SELECT * FROM EOD WHERE TICKER LIKE '" + ticker+"'";
@@ -185,7 +165,11 @@ public class Connector {
 
     private final DateFormat EODDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-    public void insertMarketData(YahooEODStock stock) {
+    /**
+     * Insert an EOD into the database.
+     * @param stock 
+     */
+    public void insertEOD(YahooEODStock stock) {
         try {
 
             insertEODtock.setString(1, stock.getTicker());
@@ -210,10 +194,6 @@ public class Connector {
         }
 
     }
-
-    private final DateFormat lastTradeDateFormat = new SimpleDateFormat("MM/dd/yyyy");
-    private final DateFormat lastTradeTimeFormat = new SimpleDateFormat("HH:mm");
-
 
     public Connection getConnection() {
         return connection;

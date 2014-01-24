@@ -41,15 +41,21 @@ public class DataRetriever {
         connector.init();
     }
 
+    /**
+     * Retrieve a stock Definition from the Yahoo Website.
+     * Using the URL : http://finance.yahoo.com/d/quotes.csv?s=TICKER&f=sn
+     * @param ticker
+     * @return 
+     */
     public SingleStockDef retrieveStockDef(String ticker) {
+        
         SingleStockDef def = new SingleStockDef();
-//        URL oracle = new URL("http://finance.yahoo.com/d/quotes.csv?s=GOOG&f=snb2a5b6b3");
-        URL yahooURL;
+        URL url;
         BufferedReader in = null;
         try {
             log.info("requesting http://finance.yahoo.com/d/quotes.csv?s="+ticker+"&f=sn");
-            yahooURL = new URL("http://finance.yahoo.com/d/quotes.csv?s="+ticker+"&f=sn");
-            in = new BufferedReader(new InputStreamReader(yahooURL.openStream()));
+            url = new URL("http://finance.yahoo.com/d/quotes.csv?s="+ticker+"&f=sn");
+            in = new BufferedReader(new InputStreamReader(url.openStream()));
             String inputLine = in.readLine();
 
             log.info("received " + inputLine);
@@ -75,6 +81,12 @@ public class DataRetriever {
         return def;
     }
 
+    /**
+     * 
+     * 
+     * @param stockDefs
+     * @throws IOException 
+     */
     public void processEODStockData(List<SingleStockDef> stockDefs) throws IOException {
 
         List<InputYahooEODHistorical> inputHistoricals = new ArrayList<>();
@@ -108,12 +120,12 @@ public class DataRetriever {
 //      Insert data into the database.
         for (EODStockManager stockManager : stockManagers) {
             log.info("serialize stock : " + stockManager.getTicker());
-//            connector.generateEODMarketDataTable(stockManager.getTicker());
             List<YahooEODStock> stocks = stockManager.getStocks();
             for (YahooEODStock stock : stocks) {
-                connector.insertMarketData(stock);
+                connector.insertEOD(stock);
             }
         }
+            log.info("EOD data retreived ... ");
     }
 
     /**
@@ -122,8 +134,9 @@ public class DataRetriever {
      *
      * @throws java.io.IOException
      */
+    @Deprecated
     public void processEODStockData() throws IOException {
-        List<SingleStockDef> stockDefs = connector.loadStockDB();
+        List<SingleStockDef> stockDefs = connector.loadStockDefDB();
         processEODStockData(stockDefs);
     }
 
@@ -189,7 +202,7 @@ public class DataRetriever {
      * @return
      */
     private String loadYahooTicker() {
-        List<SingleStockDef> stockDefs = connector.loadStockDB();
+        List<SingleStockDef> stockDefs = connector.loadStockDefDB();
 
         List<String> tickers = new ArrayList<>(stockDefs.size());
 
@@ -202,18 +215,6 @@ public class DataRetriever {
         }
 
         return tickersFromList(tickers);
-    }
-
-    public static void main(String[] args) throws IOException,
-            InterruptedException, SQLException, ClassNotFoundException {
-
-        DataRetriever dr = new DataRetriever();
-        Connector connector = new Connector();
-        dr.setConnector(connector);
-        dr.init();
-        connector.generateStockTable();
-        connector.generateEODMarketDataTable();
-        connector.executeQuery(Request.ALL_STOCK);
     }
 
 }
