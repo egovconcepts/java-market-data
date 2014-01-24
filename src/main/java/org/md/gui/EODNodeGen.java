@@ -12,7 +12,6 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.md.retriever.stock.YahooEODStock;
 import org.md.util.Time;
@@ -79,6 +78,7 @@ public class EODNodeGen {
 
         final NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("Close Price");
+        yAxis.setForceZeroInRange(false);
 
         Collections.sort(eods);
 
@@ -104,9 +104,6 @@ public class EODNodeGen {
             log.debug(yeods);
             seriesClose.getData().add(new XYChart.Data(yeods.getDate(), yeods.getClose()));
         }
-
-        lineChart.prefHeight(Double.MAX_VALUE);
-        lineChart.prefWidth(Double.MAX_VALUE);
 
         lineChart.getData().addAll(seriesClose);
 
@@ -173,9 +170,6 @@ public class EODNodeGen {
             }
             lineChart.getData().addAll(seriesClose);
         }
-
-        lineChart.prefHeight(Double.MAX_VALUE);
-        lineChart.prefWidth(Double.MAX_VALUE);
 
         return (Node) lineChart;
     }

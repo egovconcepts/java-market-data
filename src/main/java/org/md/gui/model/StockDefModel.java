@@ -6,17 +6,17 @@ import javafx.beans.property.SimpleStringProperty;
  *
  * @author remembermewhy
  */
-public class StockModel {
+public class StockDefModel {
 
     private final SimpleStringProperty ticker;
     private final SimpleStringProperty definition;
 
-    public StockModel(SimpleStringProperty ticker, SimpleStringProperty def) {
+    public StockDefModel(SimpleStringProperty ticker, SimpleStringProperty def) {
         this.ticker = ticker;
         this.definition = def;
     }
     
-    public StockModel(String ticker, String def) {
+    public StockDefModel(String ticker, String def) {
         this.ticker = new SimpleStringProperty(ticker);
         this.definition = new SimpleStringProperty(def);
     }

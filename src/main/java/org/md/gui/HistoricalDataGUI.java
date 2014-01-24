@@ -2,9 +2,11 @@ package org.md.gui;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import javafx.application.Application;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,12 +25,14 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
-import org.md.gui.model.StockModel;
+import org.md.gui.model.StockDefModel;
+import org.md.gui.model.YahooEODStockModel;
 import org.md.gui.services.ProcessEODService;
 import org.md.gui.services.ProcessEODSingleStockService;
 import org.md.retriever.stock.SingleStockDef;
@@ -45,7 +49,7 @@ public class HistoricalDataGUI extends Application {
     private static final Logger Log = Logger.getLogger(HistoricalDataGUI.class);
 
     private final TableView table = new TableView();
-    private final ObservableList<StockModel> data = FXCollections.observableArrayList();
+    private final ObservableList<StockDefModel> data = FXCollections.observableArrayList();
     Connector connector;
     DataRetriever dr;
 
@@ -81,7 +85,7 @@ public class HistoricalDataGUI extends Application {
         List<SingleStockDef> stockList = connector.loadStockDB();
 
         for (SingleStockDef stockDef : stockList) {
-            data.add(new StockModel(new SimpleStringProperty(stockDef.getTicker()), new SimpleStringProperty(stockDef.getDefinition())));
+            data.add(new StockDefModel(new SimpleStringProperty(stockDef.getTicker()), new SimpleStringProperty(stockDef.getDefinition())));
         }
 
         final BorderPane borderPane = new BorderPane();
@@ -97,14 +101,14 @@ public class HistoricalDataGUI extends Application {
         table.getColumns().addAll(tickerColumn);
 
         tickerColumn.setCellValueFactory(
-                new PropertyValueFactory<StockModel, String>("ticker")
+                new PropertyValueFactory<StockDefModel, String>("ticker")
         );
 
         TableColumn defColumn = new TableColumn("Definition");
         table.getColumns().addAll(defColumn);
 
         defColumn.setCellValueFactory(
-                new PropertyValueFactory<StockModel, String>("definition")
+                new PropertyValueFactory<StockDefModel, String>("definition")
         );
 
         table.setItems(data);
@@ -131,9 +135,39 @@ public class HistoricalDataGUI extends Application {
 
             @Override
             public void handle(MouseEvent t) {
-                StockModel stockModel = (StockModel) table.getSelectionModel().getSelectedItem();
-                if (stockModel != null) {
-                    Log.info(stockModel.getTicker() + " " + stockModel.getDefinition());
+                StockDefModel stockModel = (StockDefModel) table.getSelectionModel().getSelectedItem();
+                if (stockModel == null) {
+                    return;
+                }
+
+                Log.info(stockModel.getTicker() + " " + stockModel.getDefinition());
+
+                if (t.getButton() == MouseButton.SECONDARY) {
+                    EODView view = new EODView();
+
+                    try {
+
+                        List<YahooEODStock> stocks = connector.LOAD_HISTORICAL_STOCK(stockModel.getTicker());
+                        Collections.sort(stocks);
+
+                        List<YahooEODStockModel> models = new ArrayList<>(stocks.size());
+                        for (YahooEODStock stock : stocks) {
+                            YahooEODStockModel tmp = new YahooEODStockModel(stock);
+                            models.add(tmp);
+                        }
+
+                        ObservableList<YahooEODStockModel> data = FXCollections.observableArrayList(models);
+                        view.setItems(data);
+
+                        Tab tab = new Tab(stockModel.getTicker());
+                        tab.setContent(view);
+                        pane.getTabs().add(tab);
+                        SingleSelectionModel<Tab> model = pane.getSelectionModel();
+                        model.select(tab);
+
+                    } catch (SQLException ex) {
+                        java.util.logging.Logger.getLogger(HistoricalDataGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
         });
@@ -142,17 +176,17 @@ public class HistoricalDataGUI extends Application {
 
             @Override
             public void handle(ActionEvent t) {
-                List<StockModel> stockModels = (List<StockModel>) table.getSelectionModel().getSelectedItems();
+                List<StockDefModel> stockModels = (List<StockDefModel>) table.getSelectionModel().getSelectedItems();
                 if (stockModels != null && stockModels.size() > 0) {
                     Log.info(" --------------------------------------------- ");
-                    for (StockModel model : stockModels) {
+                    for (StockDefModel model : stockModels) {
                         Log.info("Load graph for " + model.getTicker() + " " + model.getDefinition());
                     }
                     Log.info(" --------------------------------------------- ");
 
                     try {
                         List<List<YahooEODStock>> eods = new ArrayList<>();
-                        for (StockModel model : stockModels) {
+                        for (StockDefModel model : stockModels) {
                             List<YahooEODStock> eod = connector.LOAD_HISTORICAL_STOCK(model.getTicker());
                             eods.add(eod);
                         }
@@ -165,7 +199,7 @@ public class HistoricalDataGUI extends Application {
                             node = EODNodeGen.GenerateTickerNode(eods);
                         }
                         String tickers = "";
-                        for (StockModel model : stockModels) {
+                        for (StockDefModel model : stockModels) {
                             tickers = tickers + " " + model.getTicker();
                         }
                         Tab tab = new Tab(tickers);
@@ -189,7 +223,7 @@ public class HistoricalDataGUI extends Application {
 
         try {
             connector.addStockDef(def.getTicker(), def.getDefinition());
-            data.add(new StockModel(def.getTicker(), def.getDefinition()));
+            data.add(new StockDefModel(def.getTicker(), def.getDefinition()));
             service.start();
         } catch (SQLException ex) {
             Log.error(ex);
