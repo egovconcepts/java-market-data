@@ -146,17 +146,14 @@ public class EODNodeGen {
 
         List<String> dateList = null;
         try {
-//            minDate = firstDate(eods);
             minDate = firstDate(shortList);
             dateList = new Time().listOfDate(minDate);
         } catch (ParseException ex) {
             log.error(ex);
-//            Logger.getLogger(EODNodeGen.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         List<List<YahooEODStock>> unifiedEOD = new ArrayList<>();
 
-//        for (List<YahooEODStock> list : eods) {
         for (List<YahooEODStock> list : shortList) {
             List<YahooEODStock> tmp = unifyList(dateList, list);
             unifiedEOD.add(tmp);
