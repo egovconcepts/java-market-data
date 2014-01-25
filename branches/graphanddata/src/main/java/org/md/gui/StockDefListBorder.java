@@ -11,6 +11,9 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -48,8 +51,6 @@ public class StockDefListBorder extends BorderPane {
         stockListTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         buttonGraph.setOnMouseClicked(new ButtonGraphEvent());
-        stockListTable.setOnMouseClicked(new StockListTableEvent());
-
         TableColumn tickerColumn = new TableColumn("Ticker");
         stockListTable.getColumns().addAll(tickerColumn);
         tickerColumn.setCellValueFactory(
@@ -96,13 +97,14 @@ public class StockDefListBorder extends BorderPane {
         public void handle(MouseEvent t) {
 
             List<StockDefModel> stockModels = (List<StockDefModel>) stockListTable.getSelectionModel().getSelectedItems();
+
             if (stockModels != null && stockModels.size() > 0) {
 
-                for (StockDefModel model : stockModels) {
-                    log.debug("Load graph for " + model.getTicker() + " " + model.getDefinition());
-                }
-
                 try {
+
+                    for (StockDefModel model : stockModels) {
+                        log.debug("Load graph and data for " + model.getTicker() + " " + model.getDefinition());
+                    }
 
                     List<List<YahooEODStock>> eods = new ArrayList<>();
                     for (StockDefModel model : stockModels) {
@@ -123,49 +125,35 @@ public class StockDefListBorder extends BorderPane {
                         tickers = tickers + " " + model.getTicker();
                     }
 
-                    hdgui.addTab(tickers, node);
+                    TabPane pane = new TabPane();
+                    Tab graphTab = new Tab("Graph");
+                    graphTab.setContent(node);
+                    pane.getTabs().add(graphTab);
+                    SingleSelectionModel<Tab> model = pane.getSelectionModel();
+                    model.select(graphTab);
 
-                } catch (SQLException sqle) {
-                    log.error("Error loading stocks ");
-                }
-
-            }
-        }
-
-    }
-
-    private class StockListTableEvent implements EventHandler<MouseEvent> {
-
-        @Override
-        public void handle(MouseEvent t) {
-            StockDefModel stockModel = (StockDefModel) stockListTable.getSelectionModel().getSelectedItem();
-            if (stockModel == null) {
-                return;
-            }
-
-            log.info(stockModel.getTicker() + " " + stockModel.getDefinition());
-
-            if (t.getButton() == MouseButton.SECONDARY) {
-                EODView view = new EODView();
-
-                try {
-                    List<YahooEODStock> stocks = hdgui.connector.loadEOD(stockModel.getTicker());
-                    Collections.sort(stocks);
-
-                    List<YahooEODStockModel> models = new ArrayList<>(stocks.size());
-                    for (YahooEODStock stock : stocks) {
-                        YahooEODStockModel tmp = new YahooEODStockModel(stock);
-                        models.add(tmp);
+                    EODView view = new EODView();
+                    List<YahooEODStockModel> models = new ArrayList<>();
+                    for (List<YahooEODStock> stocks : eods) {
+                        for (YahooEODStock stock : stocks) {
+                            YahooEODStockModel tmp = new YahooEODStockModel(stock);
+                            models.add(tmp);
+                        }
                     }
 
                     ObservableList<YahooEODStockModel> data = FXCollections.observableArrayList(models);
                     view.setItems(data);
 
-                    hdgui.addTab(stocks.get(0).getTicker(), view);
+                    Tab dataTab = new Tab("Datas");
+                    dataTab.setContent(view);
+                    pane.getTabs().add(dataTab);
 
-                } catch (SQLException ex) {
-                    log.error(null, ex);
+                    hdgui.addTab(tickers, pane);
+
+                } catch (SQLException sqle) {
+                    log.error("Error loading stocks ");
                 }
+
             }
         }
 
