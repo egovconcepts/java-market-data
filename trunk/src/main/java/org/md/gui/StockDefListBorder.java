@@ -149,7 +149,6 @@ public class StockDefListBorder extends BorderPane {
                 EODView view = new EODView();
 
                 try {
-
                     List<YahooEODStock> stocks = hdgui.connector.loadEOD(stockModel.getTicker());
                     Collections.sort(stocks);
 
