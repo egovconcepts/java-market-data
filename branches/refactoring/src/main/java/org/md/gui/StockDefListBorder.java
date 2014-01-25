@@ -11,8 +11,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.SingleSelectionModel;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -23,7 +21,6 @@ import org.apache.log4j.Logger;
 import org.md.gui.model.StockDefModel;
 import org.md.gui.model.YahooEODStockModel;
 import org.md.gui.services.ProcessEODSingleStockService;
-import org.md.retriever.Connector;
 import org.md.retriever.stock.SingleStockDef;
 import org.md.retriever.stock.YahooEODStock;
 
