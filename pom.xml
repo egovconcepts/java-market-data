@@ -4,19 +4,17 @@
 
     <groupId>org.md</groupId>
     <artifactId>eod</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <packaging>jar</packaging>
 
     <name>marketdata</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!--<mainClass>org.rememberme.javafxgui.MainApp</mainClass>-->
         <mainClass>org.md.gui.HistoricalDataGUI</mainClass>
     </properties>
 
     <organization>
-        <!-- Used as the 'Vendor' for JNLP generation -->
         <name>remembermewhy</name>
     </organization>
 
