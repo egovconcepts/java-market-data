@@ -1,5 +1,4 @@
 #summary Introducing the market data retriever
-#labels Featured
 #sidebar TableOfContents
 
 = Introduction =
@@ -18,22 +17,8 @@ Details on the Yahoo "api" [http://www.gummy-stuff.org/Yahoo-data.htm here].
 == Short term project : ==
 
 Extract EOD market data from the yahoo "api".
-Serialize into an embedded apache derby database.
 Visualize the information ( Graph ).
 
 == Long Term : ==
 
-The goals is to extract realtime market data information from the yahoo website and serialized them. The future development should provide graphical interface for stock price visualization.
-
-== Alternative : == 
-
-=== EODDAta ===
-
-From EODData it is possible to purchase historical market data for a fees.
-So the goal would  use the http://eoddata.com/ market data. Intraday as well as EOD.
-
-=== Netbean RCP platform ===
-
-Integrate the application within the [https://netbeans.org/features/platform/ Netbeans RCP] platform.
-
-[http://www.osnews.com/story/19266/WTFs_m http://www.osnews.com/images/comics/wtfm.jpg]
+Use alternative source for EOD and intraday market data.
