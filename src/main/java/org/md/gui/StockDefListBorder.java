@@ -1,12 +1,16 @@
 package org.md.gui;
 
+import org.md.gui.services.EODNodeGenTask;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -17,12 +21,13 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import org.apache.log4j.Logger;
 import org.md.gui.model.StockDefModel;
 import org.md.gui.model.YahooEODStockModel;
+import org.md.gui.services.LoadEODTask;
+import org.md.gui.services.LoadStockDefTask;
 import org.md.gui.services.ProcessEODSingleStockService;
 import org.md.retriever.stock.SingleStockDef;
 import org.md.retriever.stock.YahooEODStock;
@@ -42,6 +47,7 @@ public class StockDefListBorder extends BorderPane {
 
     private final TableView stockListTable = new TableView();
     private final ObservableList<StockDefModel> data = FXCollections.observableArrayList();
+    
     private final Button buttonGraph = new Button("Show Graph");
 
     public void init() {
@@ -51,28 +57,27 @@ public class StockDefListBorder extends BorderPane {
         stockListTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         buttonGraph.setOnMouseClicked(new ButtonGraphEvent());
+        
         TableColumn tickerColumn = new TableColumn("Ticker");
-        stockListTable.getColumns().addAll(tickerColumn);
+        TableColumn defColumn = new TableColumn("Definition");
+        stockListTable.getColumns().addAll(tickerColumn,defColumn);
+        
         tickerColumn.setCellValueFactory(
                 new PropertyValueFactory<StockDefModel, String>("ticker")
         );
-
-        TableColumn defColumn = new TableColumn("Definition");
-        stockListTable.getColumns().addAll(defColumn);
+        
         defColumn.setCellValueFactory(
                 new PropertyValueFactory<StockDefModel, String>("definition")
         );
 
-        List<SingleStockDef> stockList = hdgui.connector.loadStockDefDB();
-        for (SingleStockDef stockDef : stockList) {
-            data.add(new StockDefModel(new SimpleStringProperty(stockDef.getTicker()), new SimpleStringProperty(stockDef.getDefinition())));
-        }
-
-        stockListTable.setItems(data);
-
+        Task<ObservableList<StockDefModel>> loadStockTask = new LoadStockDefTask(hdgui.connector);
+        stockListTable.itemsProperty().bind(loadStockTask.valueProperty());
+        Thread thread = new Thread(loadStockTask);
+        thread.start();
+        
         setCenter(stockListTable);
         setBottom(buttonGraph);
-
+        
     }
 
     public void addStock(SingleStockDef def) {
@@ -113,11 +118,15 @@ public class StockDefListBorder extends BorderPane {
                     }
 
                     Node node = null;
+                    EODNodeGenTask task = new EODNodeGenTask();
+                    task.setEods(eods);
+                    new Thread(task).start();
 
-                    if (eods.size() == 1) {
-                        node = EODNodeGen.GenerateSingleTickerNode(eods.get(0));
-                    } else {
-                        node = EODNodeGen.GenerateTickerNode(eods);
+                    try {
+//                        node = task.call();
+//                        node = (Node)task.get();
+                    } catch (Exception ex) {
+                        log.error(null, ex);
                     }
 
                     String tickers = "";
@@ -133,17 +142,12 @@ public class StockDefListBorder extends BorderPane {
                     model.select(graphTab);
 
                     EODView view = new EODView();
-                    List<YahooEODStockModel> models = new ArrayList<>();
-                    for (List<YahooEODStock> stocks : eods) {
-                        for (YahooEODStock stock : stocks) {
-                            YahooEODStockModel tmp = new YahooEODStockModel(stock);
-                            models.add(tmp);
-                        }
-                    }
-
-                    ObservableList<YahooEODStockModel> data = FXCollections.observableArrayList(models);
-                    view.setItems(data);
-
+                    Task<ObservableList<YahooEODStockModel>> loadEODTask = new LoadEODTask(stockModels, hdgui.connector);
+                    view.itemsProperty().bind(loadEODTask.valueProperty());
+                    
+                    Thread thread = new Thread(loadEODTask);
+                    thread.start();
+                    
                     Tab dataTab = new Tab("Datas");
                     dataTab.setContent(view);
                     pane.getTabs().add(dataTab);
