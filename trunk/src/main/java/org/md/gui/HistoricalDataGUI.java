@@ -12,6 +12,7 @@ import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
@@ -29,7 +30,6 @@ public class HistoricalDataGUI extends Application {
     private final BorderPane centerPane = new BorderPane();
     private final TabPane tabPane = new TabPane();
     private StockDefListBorder leftborder;
-    private final ProgressBar bar = new ProgressBar();
 
     Connector connector;
     DataRetriever dr;
@@ -69,11 +69,9 @@ public class HistoricalDataGUI extends Application {
         menuFile.getItems().addAll(newStock);
         menuBar.getMenus().addAll(menuFile);
 
-        bar.setMaxWidth(Double.MAX_VALUE);
-//        bar.setProgress(.5);
-//        bar.set
+        
+        StackPane pane = new StackPane();
         centerPane.setCenter(tabPane);
-        centerPane.setTop(bar);
         
         // Main Panel
         final BorderPane borderPane = new BorderPane();
@@ -86,7 +84,7 @@ public class HistoricalDataGUI extends Application {
         borderPane.setLeft(leftborder);
         borderPane.setCenter(centerPane);
         
-        Scene scene = new Scene(borderPane, 800, 600);
+        Scene scene = new Scene(borderPane, 1000, 600);
         stage.setTitle("Stock List");
         stage.setScene(scene);
         stage.show();
@@ -97,9 +95,6 @@ public class HistoricalDataGUI extends Application {
         return dr;
     }
 
-    public ProgressBar getBar() {
-        return bar;
-    }
 
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
