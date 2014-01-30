@@ -156,7 +156,7 @@ public class Connector {
             String dateStr = EODDateFormat.format(date);
 
             YahooEODStock stock = new YahooEODStock(ticker, dateStr, open, high, low, close, volume, adj);
-            log.debug("load EOD : " + stock);
+//            log.debug("load EOD : " + stock);
             historicalStock.add(stock);
         }
 
