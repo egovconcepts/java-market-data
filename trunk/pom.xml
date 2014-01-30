@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.md</groupId>
-    <artifactId>backgroundgraph</artifactId>
+    <artifactId>eod</artifactId>
     <version>1.0.5</version>
     <packaging>jar</packaging>
 
-    <name>backgroundgraph</name>
+    <name>marketdata</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
