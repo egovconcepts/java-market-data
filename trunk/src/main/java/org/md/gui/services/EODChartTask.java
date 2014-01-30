@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.scene.Node;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import org.apache.log4j.Logger;
+import org.md.gui.model.StockDefModel;
+import org.md.retriever.Connector;
 import org.md.retriever.stock.YahooEODStock;
 import org.md.util.Time;
 
@@ -21,23 +21,29 @@ import org.md.util.Time;
  *
  * @author remembermewhy
  */
-public class EODNodeGenTask extends Task<Node> {
+public class EODChartTask extends Task<ObservableList<XYChart.Series<String, Number>>> {
 
-    private static final Logger log = Logger.getLogger(EODNodeGenTask.class);
+    private static final Logger log = Logger.getLogger(EODChartTask.class);
     private static final DateFormat EODDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    
-    private static int STEPS = 360;
-    
+    private static int STEPS = 50;
+
+    private final List<StockDefModel> stockModels;
+    private final Connector connector;
+
+    public EODChartTask(List<StockDefModel> stockModels, Connector connector) {
+        this.stockModels = stockModels;
+        this.connector = connector;
+    }
+
     @Override
-    protected Node call() throws Exception {
+    protected ObservableList<XYChart.Series<String, Number>> call() throws Exception {
 
-        final CategoryAxis xAxis = new CategoryAxis();
-        xAxis.setLabel("Date");
-        final NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("Close Price");
+        List<List<YahooEODStock>> eods = new ArrayList<>();
+        for (StockDefModel model : stockModels) {
+            List<YahooEODStock> eod = connector.loadEOD(model.getTicker());
+            eods.add(eod);
+        }
 
-        //creating the chart
-        final LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis);
         final List<List<YahooEODStock>> shortList = new ArrayList<>();
 
         for (List<YahooEODStock> eod : eods) {
@@ -60,17 +66,17 @@ public class EODNodeGenTask extends Task<Node> {
 
         String minDate = "";
 
-        updateProgress(1, 3);
+        List<XYChart.Series<String, Number>> series = new ArrayList<>();
 
         if (shortList.size() == 1) {
-            XYChart.Series seriesClose = new XYChart.Series();
+            XYChart.Series<String, Number> serieClose = new XYChart.Series<>();
             List<YahooEODStock> stocks = shortList.get(0);
-            seriesClose.setName(stocks.get(0).getTicker());
+            serieClose.setName(stocks.get(0).getTicker());
 
             for (YahooEODStock stock : stocks) {
-                seriesClose.getData().add(new XYChart.Data(stock.getDate(), stock.getClose()));
+                serieClose.getData().add(new XYChart.Data(stock.getDate(), stock.getClose()));
             }
-            lineChart.getData().addAll(seriesClose);
+            series.add(serieClose);
 
         } else {
 
@@ -88,21 +94,26 @@ public class EODNodeGenTask extends Task<Node> {
                 List<YahooEODStock> tmp = unifyList(dateList, list);
                 unifiedEOD.add(tmp);
             }
-            updateProgress(2, 3);
 
             for (List<YahooEODStock> list : unifiedEOD) {
-                XYChart.Series seriesClose = new XYChart.Series();
-                seriesClose.setName(list.get(0).getTicker());
+                XYChart.Series<String, Number> serieClose = new XYChart.Series<>();
+                serieClose.setName(list.get(0).getTicker());
                 for (YahooEODStock yeods : list) {
-                    seriesClose.getData().add(new XYChart.Data(yeods.getDate(), yeods.getClose()));
+                    serieClose.getData().add(new XYChart.Data(yeods.getDate(), yeods.getClose()));
                 }
-                lineChart.getData().addAll(seriesClose);
+                series.add(serieClose);
             }
         }
-        
-        return (Node) lineChart;
+
+        return FXCollections.observableArrayList(series);
     }
 
+    /**
+     * Return the most previous date of differents list of objects.
+     * @param eods
+     * @return
+     * @throws ParseException 
+     */
     private static String firstDate(List<List<YahooEODStock>> eods) throws ParseException {
 
         for (List<YahooEODStock> eod : eods) {
@@ -149,11 +160,4 @@ public class EODNodeGenTask extends Task<Node> {
         return result;
     }
 
-    List<List<YahooEODStock>> eods = new ArrayList<>();
-
-    public void setEods(List<List<YahooEODStock>> eods) {
-        this.eods = eods;
-    }
-
-    
 }
