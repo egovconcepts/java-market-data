@@ -2,11 +2,13 @@ package org.md.gui;
 
 import org.md.gui.services.EODChartTask;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import javafx.event.EventHandler;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
@@ -26,10 +28,9 @@ import org.apache.log4j.Logger;
 import org.md.gui.model.StockDefModel;
 import org.md.gui.model.YahooEODStockModel;
 import org.md.gui.services.LoadEODTask;
-import org.md.gui.services.LoadStockDefTask;
+import org.md.gui.services.LoadStockDefService;
 import org.md.gui.services.ProcessEODSingleStockService;
 import org.md.retriever.stock.SingleStockDef;
-import org.md.retriever.stock.YahooEODStock;
 
 /**
  *
@@ -39,13 +40,15 @@ public class StockDefListBorder extends BorderPane {
 
     private static final Logger log = Logger.getLogger(StockDefListBorder.class);
     private final HistoricalDataGUI hdgui;
+    private final LoadStockDefService loadStockService;
 
     public StockDefListBorder(HistoricalDataGUI hdgui) {
         this.hdgui = hdgui;
+        loadStockService = new LoadStockDefService(hdgui.connector);
     }
 
     private final TableView stockListTable = new TableView();
-    private final ObservableList<StockDefModel> data = FXCollections.observableArrayList();
+//    private final ObservableList<StockDefModel> data = FXCollections.observableArrayList();
 
     private final Button buttonGraph = new Button("Show Graph");
 
@@ -69,14 +72,33 @@ public class StockDefListBorder extends BorderPane {
                 new PropertyValueFactory<StockDefModel, String>("definition")
         );
 
-        Task<ObservableList<StockDefModel>> loadStockTask = new LoadStockDefTask(hdgui.connector);
-        stockListTable.itemsProperty().bind(loadStockTask.valueProperty());
-        Thread thread = new Thread(loadStockTask);
-        thread.start();
+        stockListTable.itemsProperty().bind(loadStockService.valueProperty());
+        loadStockService.start();
+
+//        loadStockService.stateProperty().addListener(new ChangeListener<Worker.State>() {
+//
+//            @Override
+//            public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) {
+//                switch (newValue) {
+//                    case SUCCEEDED:
+//                        loadStockService.reset();
+//                        break;
+//                    case FAILED:
+//                        loadStockService.reset();
+//                        break;
+//                }
+//            }
+//
+//        });
 
         setCenter(stockListTable);
         setBottom(buttonGraph);
 
+    }
+
+    public void reload() {
+        loadStockService.reset();
+        loadStockService.start();
     }
 
     public void addStock(SingleStockDef def) {
@@ -85,10 +107,12 @@ public class StockDefListBorder extends BorderPane {
         service.setSingleStockDef(def);
         try {
             hdgui.connector.addStockDef(def.getTicker(), def.getDefinition());
-            data.add(new StockDefModel(def.getTicker(), def.getDefinition()));
+//            data.add(new StockDefModel(def.getTicker(), def.getDefinition()));
+            reload();
             service.start();
         } catch (SQLException ex) {
             log.error(ex);
+
         }
     }
 
