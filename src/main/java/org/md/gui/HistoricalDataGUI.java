@@ -28,7 +28,7 @@ public class HistoricalDataGUI extends Application {
     private static final Logger log = Logger.getLogger(HistoricalDataGUI.class);
     private final BorderPane centerPane = new BorderPane();
     private final TabPane tabPane = new TabPane();
-    private StockDefListBorder leftborder;
+    private StockDefListBorderPane leftborder;
 
     Connector connector;
     DataRetriever dr;
@@ -76,7 +76,7 @@ public class HistoricalDataGUI extends Application {
         final BorderPane borderPane = new BorderPane();
 
         // Stock Definition Panel
-        leftborder = new StockDefListBorder(this);
+        leftborder = new StockDefListBorderPane(this);
         leftborder.init();
         
         borderPane.setTop(menuBar);

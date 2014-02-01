@@ -36,13 +36,13 @@ import org.md.retriever.stock.SingleStockDef;
  *
  * @author remembermewhy
  */
-public class StockDefListBorder extends BorderPane {
+public class StockDefListBorderPane extends BorderPane {
 
-    private static final Logger log = Logger.getLogger(StockDefListBorder.class);
+    private static final Logger log = Logger.getLogger(StockDefListBorderPane.class);
     private final HistoricalDataGUI hdgui;
     private final LoadStockDefService loadStockService;
 
-    public StockDefListBorder(HistoricalDataGUI hdgui) {
+    public StockDefListBorderPane(HistoricalDataGUI hdgui) {
         this.hdgui = hdgui;
         loadStockService = new LoadStockDefService(hdgui.connector);
     }
@@ -74,22 +74,6 @@ public class StockDefListBorder extends BorderPane {
 
         stockListTable.itemsProperty().bind(loadStockService.valueProperty());
         loadStockService.start();
-
-//        loadStockService.stateProperty().addListener(new ChangeListener<Worker.State>() {
-//
-//            @Override
-//            public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) {
-//                switch (newValue) {
-//                    case SUCCEEDED:
-//                        loadStockService.reset();
-//                        break;
-//                    case FAILED:
-//                        loadStockService.reset();
-//                        break;
-//                }
-//            }
-//
-//        });
 
         setCenter(stockListTable);
         setBottom(buttonGraph);
