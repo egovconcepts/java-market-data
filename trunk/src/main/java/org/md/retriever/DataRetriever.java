@@ -157,6 +157,7 @@ public class DataRetriever {
         URL url = new URL("http://ichart.finance.yahoo.com/table.csv?s=" + ticker);
 
         BufferedReader in = null;
+        
         try {
             in = new BufferedReader(new InputStreamReader(url.openStream()));
         } catch (java.io.FileNotFoundException fnfe) {
