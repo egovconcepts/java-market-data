@@ -107,7 +107,6 @@ public class StockDefListBorder extends BorderPane {
         service.setSingleStockDef(def);
         try {
             hdgui.connector.addStockDef(def.getTicker(), def.getDefinition());
-//            data.add(new StockDefModel(def.getTicker(), def.getDefinition()));
             reload();
             service.start();
         } catch (SQLException ex) {

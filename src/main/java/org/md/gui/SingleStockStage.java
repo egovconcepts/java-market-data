@@ -1,6 +1,5 @@
 package org.md.gui;
 
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -10,7 +9,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javax.net.ssl.SSLEngineResult;
 import org.md.retriever.stock.SingleStockDef;
 import org.md.retriever.DataRetriever;
 
@@ -76,7 +74,6 @@ public class SingleStockStage extends Stage {
             public void handle(ActionEvent t) {
                 hdgui.addStock(def);
                 SingleStockStage.this.close();
-//                System.exit(0);
             }
         });
     }
