@@ -2,6 +2,7 @@ package org.md.gui;
 
 import org.md.gui.event.LookupStockHandler;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -29,14 +30,23 @@ public class HistoricalDataGUI extends Application {
     private final BorderPane centerPane = new BorderPane();
     private final TabPane tabPane = new TabPane();
     private StockDefListBorderPane leftborder;
+    private Stage stage;
 
     Connector connector;
     DataRetriever dr;
+
+    public Stage getStage() {
+        return stage;
+    }
 
     public HistoricalDataGUI() {
 
     }
 
+    public void reloadStock(){
+        leftborder.reload();
+    }
+    
     public void addStock(SingleStockDef def) {
         leftborder.addStock(def);
     }
@@ -54,6 +64,8 @@ public class HistoricalDataGUI extends Application {
 
         BasicConfigurator.configure(); // Log4J configurator
 
+        this.stage = stage;
+
         connector = new Connector();
         dr = new DataRetriever();
         dr.setConnector(connector);
@@ -66,23 +78,29 @@ public class HistoricalDataGUI extends Application {
         MenuItem newStock = new MenuItem("New Stock");
         newStock.setOnAction(new LookupStockHandler(this));
         menuFile.getItems().addAll(newStock);
+        MenuItem exit = new MenuItem("Exit");
+        
+        exit.setOnAction((ActionEvent event) -> {
+            System.exit(0);
+        });
+        
+        menuFile.getItems().addAll(exit);
         menuBar.getMenus().addAll(menuFile);
 
-        
         StackPane pane = new StackPane();
         centerPane.setCenter(tabPane);
-        
+
         // Main Panel
         final BorderPane borderPane = new BorderPane();
 
         // Stock Definition Panel
         leftborder = new StockDefListBorderPane(this);
         leftborder.init();
-        
+
         borderPane.setTop(menuBar);
         borderPane.setLeft(leftborder);
         borderPane.setCenter(centerPane);
-        
+
         Scene scene = new Scene(borderPane, 1000, 600);
         stage.setTitle("Stock List");
         stage.setScene(scene);
@@ -93,7 +111,6 @@ public class HistoricalDataGUI extends Application {
     public DataRetriever getDr() {
         return dr;
     }
-
 
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
