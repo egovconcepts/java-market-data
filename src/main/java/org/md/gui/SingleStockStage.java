@@ -1,19 +1,19 @@
 package org.md.gui;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.md.retriever.stock.SingleStockDef;
 import org.md.retriever.DataRetriever;
 
 /**
- *
+ * Check for the existence of a stock from the Yahoo WebSite
  * @author remembermewhy
  */
 public class SingleStockStage extends Stage {
@@ -54,35 +54,27 @@ public class SingleStockStage extends Stage {
         this.setTitle("Lookup Stock");
         this.show();
 
-        check.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent t) {
-                SingleStockDef def1 = dataRetriever.retrieveStockDef(ticker.getText());
-                def.setTicker(def1.getTicker());
-                def.setDefinition(def1.getDefinition());
-
-                tickerText.setText(def.getTicker());
-                definitionText.setText(def.getDefinition().replaceAll("\"", ""));
-
-            }
+        check.setOnAction((ActionEvent t) -> {
+            SingleStockDef ssd = dataRetriever.retrieveStockDef(ticker.getText());
+            def.setDefinition(ssd.getDefinition());
+            def.setTicker(ssd.getTicker());
+            tickerText.setText(ssd.getTicker());
+            definitionText.setText(ssd.getDefinition().replaceAll("\"", ""));
         });
 
-        ok.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent t) {
-                hdgui.addStock(def);
-                SingleStockStage.this.close();
-            }
+        ok.setOnAction((ActionEvent t) -> {
+            RetreiveStockStage stage = new RetreiveStockStage(def,hdgui);
+            stage.initOwner(hdgui.getStage());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setWidth(SingleStockStage.this.getWidth());
+            stage.setHeight(SingleStockStage.this.getHeight());
+            stage.show();
+            stage.init();
+            SingleStockStage.this.close();
         });
         
-        cancel.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent t) {
-                SingleStockStage.this.close();
-            }
+        cancel.setOnAction((ActionEvent t) -> {
+            SingleStockStage.this.close();
         });
         
     }

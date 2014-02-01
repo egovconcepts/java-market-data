@@ -3,12 +3,8 @@ package org.md.gui;
 import org.md.gui.services.EODChartTask;
 import java.sql.SQLException;
 import java.util.List;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.concurrent.Worker;
 import javafx.event.EventHandler;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
@@ -48,8 +44,6 @@ public class StockDefListBorderPane extends BorderPane {
     }
 
     private final TableView stockListTable = new TableView();
-//    private final ObservableList<StockDefModel> data = FXCollections.observableArrayList();
-
     private final Button buttonGraph = new Button("Show Graph");
 
     public void init() {
@@ -65,11 +59,11 @@ public class StockDefListBorderPane extends BorderPane {
         stockListTable.getColumns().addAll(tickerColumn, defColumn);
 
         tickerColumn.setCellValueFactory(
-                new PropertyValueFactory<StockDefModel, String>("ticker")
+                new PropertyValueFactory<>("ticker")
         );
 
         defColumn.setCellValueFactory(
-                new PropertyValueFactory<StockDefModel, String>("definition")
+                new PropertyValueFactory<>("definition")
         );
 
         stockListTable.itemsProperty().bind(loadStockService.valueProperty());
@@ -86,8 +80,7 @@ public class StockDefListBorderPane extends BorderPane {
     }
 
     public void addStock(SingleStockDef def) {
-        ProcessEODSingleStockService service = new ProcessEODSingleStockService();
-        service.setRetriever(hdgui.dr);
+        ProcessEODSingleStockService service = new ProcessEODSingleStockService(hdgui.connector, hdgui.dr);
         service.setSingleStockDef(def);
         try {
             hdgui.connector.addStockDef(def.getTicker(), def.getDefinition());
