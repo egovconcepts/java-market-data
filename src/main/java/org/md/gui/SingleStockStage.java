@@ -76,6 +76,15 @@ public class SingleStockStage extends Stage {
                 SingleStockStage.this.close();
             }
         });
+        
+        cancel.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent t) {
+                SingleStockStage.this.close();
+            }
+        });
+        
     }
 
     /**
