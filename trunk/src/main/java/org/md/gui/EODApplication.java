@@ -16,6 +16,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.md.gui.eodview.EODScene;
 import org.md.retriever.stock.SingleStockDef;
 import org.md.retriever.Connector;
 import org.md.retriever.DataRetriever;
@@ -24,13 +25,15 @@ import org.md.retriever.DataRetriever;
  *
  * @author remembermewhy
  */
-public class HistoricalDataGUI extends Application {
+public class EODApplication extends Application {
 
-    private static final Logger log = Logger.getLogger(HistoricalDataGUI.class);
+    private static final Logger log = Logger.getLogger(EODApplication.class);
     private final BorderPane centerPane = new BorderPane();
     private final TabPane tabPane = new TabPane();
     private StockDefListBorderPane leftborder;
     private Stage stage;
+    
+    private final Scene EODGraph = new EODScene(this, tabPane);
 
     Connector connector;
     DataRetriever dr;
@@ -39,7 +42,7 @@ public class HistoricalDataGUI extends Application {
         return stage;
     }
 
-    public HistoricalDataGUI() {
+    public EODApplication() {
 
     }
 
@@ -100,6 +103,7 @@ public class HistoricalDataGUI extends Application {
         borderPane.setTop(menuBar);
         borderPane.setLeft(leftborder);
         borderPane.setCenter(centerPane);
+        
 
         Scene scene = new Scene(borderPane, 1000, 600);
         stage.setTitle("Stock List");

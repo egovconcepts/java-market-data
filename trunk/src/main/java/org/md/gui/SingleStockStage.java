@@ -29,9 +29,9 @@ public class SingleStockStage extends Stage {
     final Text tickerText = new Text();
     final Text definitionText = new Text();
 
-    private final HistoricalDataGUI hdgui;
+    private final EODApplication hdgui;
 
-    public SingleStockStage(HistoricalDataGUI hdgui1) {
+    public SingleStockStage(EODApplication hdgui1) {
         this.hdgui = hdgui1;
         final SingleStockDef def = new SingleStockDef();
 
