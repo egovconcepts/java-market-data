@@ -11,7 +11,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <mainClass>org.md.gui.HistoricalDataGUI</mainClass>
+        <mainClass>org.md.gui.EODApplication</mainClass>
     </properties>
 
     <organization>

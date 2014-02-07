@@ -36,5 +36,12 @@ public class StockDefModel {
     public void setDefinition(String definition){
         this.definition.set(definition);
     }
+
+    @Override
+    public String toString() {
+        return this.ticker.get() + " " + this.definition.get();
+    }
+    
+    
     
 }

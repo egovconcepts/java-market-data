@@ -3,7 +3,7 @@ package org.md.gui.event;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import org.apache.log4j.Logger;
-import org.md.gui.HistoricalDataGUI;
+import org.md.gui.EODApplication;
 import org.md.gui.SingleStockStage;
 
 /**
@@ -13,9 +13,9 @@ import org.md.gui.SingleStockStage;
 public class LookupStockHandler implements EventHandler<ActionEvent> {
 
     private static final Logger log = Logger.getLogger(LookupStockHandler.class);
-    HistoricalDataGUI historicalDataGUI;
+    EODApplication historicalDataGUI;
 
-    public LookupStockHandler(HistoricalDataGUI historicalDataGUI) {
+    public LookupStockHandler(EODApplication historicalDataGUI) {
         this.historicalDataGUI = historicalDataGUI;
     }
 

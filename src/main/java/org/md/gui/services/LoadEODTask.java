@@ -23,21 +23,26 @@ public class LoadEODTask extends Task<ObservableList<YahooEODStockModel>> {
         this.stockModels = stockModels;
         this.connector = connector;
     }
-    
+
     @Override
     protected ObservableList<YahooEODStockModel> call() throws Exception {
 
         List<List<YahooEODStock>> eods = new ArrayList<>();
+
+        int i = 0;
         for (StockDefModel model : stockModels) {
             List<YahooEODStock> eod = connector.loadEOD(model.getTicker());
             eods.add(eod);
+            updateProgress(++i, stockModels.size());
         }
 
         List<YahooEODStockModel> models = new ArrayList<>();
         for (List<YahooEODStock> stocks : eods) {
+            i = 0;
             for (YahooEODStock stock : stocks) {
                 YahooEODStockModel tmp = new YahooEODStockModel(stock);
                 models.add(tmp);
+                updateProgress(++i, stocks.size());
             }
         }
 

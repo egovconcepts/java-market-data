@@ -22,13 +22,13 @@ import org.md.retriever.stock.SingleStockDef;
 public class RetreiveStockStage extends Stage {
 
     private static final Logger log = Logger.getLogger(RetreiveStockStage.class);
-    private final HistoricalDataGUI hdgui;
+    private final EODApplication hdgui;
     private final SingleStockDef ssd;
     private final ProcessEODSingleStockService service;
     private final ProgressBar progressBar = new ProgressBar();
     private final Text text = new Text();
 
-    RetreiveStockStage(SingleStockDef def, HistoricalDataGUI hdgui) {
+    RetreiveStockStage(SingleStockDef def, EODApplication hdgui) {
         this.hdgui = hdgui;
         this.ssd = def;
         this.service = new ProcessEODSingleStockService(hdgui.connector, hdgui.dr);
